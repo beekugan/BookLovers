@@ -1,2 +1,2 @@
-# Bookies
+# BookLovers
 A team university project
