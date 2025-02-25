@@ -17,6 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from books.views import add_genre
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("add-genre/", add_genre, name="add_genre"),
 ]
