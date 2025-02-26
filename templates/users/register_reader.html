@@ -1,0 +1,32 @@
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const facultyField = document.querySelector("select[name='faculty']");
+        const specialityField = document.querySelector("select[name='speciality']");
+
+        function updateSpecialities() {
+            const facultyId = facultyField.value;
+
+            fetch(`/get_specialities/?faculty_id=${facultyId}`)
+                .then(response => response.json())
+                .then(data => {
+                    specialityField.innerHTML = "";
+                    data.specialities.forEach(speciality => {
+                        const option = document.createElement("option");
+                        option.value = speciality.id;
+                        option.textContent = speciality.name;
+                        specialityField.appendChild(option);
+                    });
+                });
+        }
+
+        facultyField.addEventListener("change", updateSpecialities);
+    });
+</script>
+
+
+    <button type="submit">Зареєструватися</button>
+</form>

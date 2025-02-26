@@ -8,6 +8,7 @@ class User(AbstractUser):
         ('librarian', 'Librarian'),
     ]
     type_user = models.CharField(max_length=10, choices=TYPE_CHOICES)
+    phone = models.CharField(max_length=20, blank=True, null=True)
 
     def __str__(self):
         return f"{self.username} ({self.get_type_user_display()})"
@@ -15,27 +16,32 @@ class User(AbstractUser):
 
 # Факультет
 class Faculty(models.Model):
-    name_faculty = models.CharField(max_length=255)
-    name_dean = models.CharField(max_length=255)
-    tel_dean = models.CharField(max_length=20)
+    name = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
-        return self.name_faculty
+        return self.name
+
+
 
 
 # Спеціальність
 class Speciality(models.Model):
-    name_speciality = models.CharField(max_length=255)
-    faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255, unique=True)
+    faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE, related_name="specialities")
 
     def __str__(self):
-        return self.name_speciality
+        return f"{self.name} ({self.faculty})"
 
 
-# Зв’язок читача зі спеціальністю
+    def __str__(self):
+        return f"{self.name} ({self.faculty.name})"
+
+
+# Зв’язок читача зі спеціальністю та факультетом
 class ReaderSpeciality(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, limit_choices_to={'type_user': 'reader'})
+    faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE)
     speciality = models.ForeignKey(Speciality, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.user.username} - {self.speciality.name_speciality}"
+        return f"{self.user.username} - {self.speciality} ({self.faculty})"

@@ -16,10 +16,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-
+from users.views import register,  register_reader, get_specialities
 from books.views import add_genre
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("add-genre/", add_genre, name="add_genre"),
+    path("register/", register, name="register"),
+    path("register_reader/<str:email>/", register_reader, name="register_reader"),
+
+    path("get_specialities/", get_specialities, name="get_specialities"),
+
+
 ]
