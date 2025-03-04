@@ -1,11 +1,80 @@
-{% extends "base.html" %}
+{% load static %}
 
-{% block content %}
-<h2>Реєстрація</h2>
-<form method="post">
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Реєстрація</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+
+<body class="body_login">
+<div class="container">
+  <img class="logo_log" src="{% static 'img/logo.png' %}" alt="Лого" />
+
+  <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Продовжити</button>
-</form>
 
-{% endblock %}
+    <input type="hidden" name="form_action" id="formAction" value="signup" />
+    <input id="signup" name="action" type="radio" value="signup" checked />
+    <label class="label_login" for="signup">Реєстрація</label>
+
+    {% if form %}
+      <div id="wrapper">
+
+
+        <p>
+          <input type="email" name="email" id="email" placeholder="Пошта" class="{{ form.email.field.widget.attrs.class }}" />
+        </p>
+        <p>
+          <div class="password-container">
+            <input type="password" name="password1" id="pass" placeholder="Пароль" class="{{ form.password1.field.widget.attrs.class }}" />
+            <i class="fas fa-eye button_pass" data-toggle="pass"></i>
+          </div>
+        </p>
+        <p>
+          <div class="password-container">
+            <input type="password" name="password2" id="repass" placeholder="Повтор паролю" class="{{ form.password2.field.widget.attrs.class }}" />
+            <i class="fas fa-eye button_pass" data-toggle="repass"></i>
+          </div>
+        </p>
+      </div>
+    {% endif %}
+
+    <button class="button_llr" type="submit" id="submitBtn">Зареєструватися</button>
+  </form>
+
+  <div id="error-container">
+    {% if form.non_field_errors %}
+      <div class="errors global-errors">{{ form.non_field_errors }}</div>
+    {% endif %}
+    {% if form.email.errors %}
+      <div class="errors">{{ form.email.errors }}</div>
+    {% endif %}
+    {% if form.password1.errors %}
+      <div class="errors">{{ form.password1.errors }}</div>
+    {% endif %}
+    {% if form.password2.errors %}
+      <div class="errors">{{ form.password2.errors }}</div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const togglePasswordButtons = document.querySelectorAll('.button_pass');
+  togglePasswordButtons.forEach(function(btn) {
+    btn.addEventListener('click', function () {
+      var fieldId = this.getAttribute('data-toggle');
+      var passwordField = document.getElementById(fieldId);
+      var type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordField.setAttribute('type', type);
+      this.classList.toggle('fa-eye');
+      this.classList.toggle('fa-eye-slash');
+    });
+  });
+});
+</script>
+</body>
+</html>

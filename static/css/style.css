@@ -1,0 +1,345 @@
+/*Шрифт Inter*/
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
+
+/*-----Сторінка логіна та реєстрації, та їх контейнери-----*/
+html, body {
+  height: 100%;
+  min-height: 100vh;
+}
+
+.body_login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('../img/2.jpg');
+  background-size: cover;
+  background-position: center;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100%;
+}
+
+.h222{
+        color: #000000;
+  font-weight: 600;
+  font-size: 24px;
+  font-family: 'Inter', sans-serif;
+    }
+
+.p222{
+        color: #3f3c3c;
+       font-weight: 300;
+       font-size: 18px;
+  font-family: 'Inter', sans-serif;
+}
+.div1111{
+  border-radius: 50px;
+  background: #e0e0e0;
+  width: 90%;
+  max-width: 960px;
+  text-align: center;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+}
+
+form {
+  width: 600px;
+  height: auto;
+  max-width: 80%;
+  margin: 20px auto;
+  background: rgba(52, 48, 48, 0.53);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+/*Анімації для курсора та кнопок (форма логіна)*/
+#wrapper, label, #arrow, button span { transition: all .5s cubic-bezier(.6,0,.4,1); }
+
+#wrapper { overflow: hidden; }
+
+#signin:checked ~ #wrapper { height: 245px; }
+#signin:checked ~ #wrapper #arrow { left: 82px; }
+#signin:checked ~ button span { transform: translate3d(0,-72px,0); }
+
+#signup:checked ~ #wrapper { height: 350px; }
+#signup:checked ~ #wrapper #arrow { left: 290px; }
+#signup:checked ~ button span { transform: translate3d(0,-144px,0); }
+
+#reset:checked ~ #wrapper { height: 145px; }
+#reset:checked ~ #wrapper #arrow { left: 500px; }
+#reset:checked ~ button span { transform: translate3d(0,0,0); }
+
+/*Надписи*/
+.label_login {
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-block;
+  font-family: 'Inter', sans-serif;
+  font-size: 25px;
+  font-weight: 300;
+  opacity: .7;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  width:100%;
+  text-align: center;
+}
+.label_login:hover {
+  transition: all .3s cubic-bezier(.6,0,.4,1);
+  opacity: 1;
+}
+input[type=radio] { display: none; }
+label[for="signin"] { margin-right: 20px; }
+label[for="reset"] { float: right; }
+input[type=radio]:checked + label { opacity: 1; }
+input[type=text],
+input[type=password],[type=email] {
+  background: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 20px;
+  font-weight: 300;
+  font-family: 'Inter', sans-serif;
+  height: 72px;
+  width: 99.5%;
+  opacity: 1;
+  text-indent: 20px;
+  transition: all .2s ease-in-out;
+}
+/*кнопка показу пароля*/
+.password-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-container input {
+  width: 100%;
+  padding-right: 30px; /* Розмір іконки, щоб забезпечити вільний простір справа */
+}
+
+.button_pass {
+  position: absolute;
+  right: 13px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+/*Підказки до полів*/
+#email::placeholder, #pass::placeholder, #repass::placeholder {
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  color: #525652;
+  font-weight: 300;
+}
+
+/*Кнопки*/
+/*кнопка для увійти, реєстрації та скидання пароля*/
+.button_llr {
+  background: #141514;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  text-transform: uppercase;
+  font-size: 20px;
+  font-weight: 300;
+  height: 75px;
+  width: 100%;
+  margin-top: -40px;
+  overflow: hidden;
+  transition: all .3s cubic-bezier(.6,0,.4,1);
+}
+.button_llr span {
+  display: block;
+  line-height: 72px;
+  position: relative;
+  top: -2px;
+  transform: translate3d(0,0,0);
+}
+.button_llr:hover {
+  background: #000000;
+}
+
+/*Курсор для форми логіна*/
+#arrow {
+  height: 3px;
+  width: 0;
+  border-bottom: 10px solid #fff;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  position: relative;
+  left: 32px;
+}
+
+/*Лого на сторінці логіна*/
+.logo_log {
+  display: block;
+  margin: 0 auto 20px;
+  width: 200px;
+  height: auto;
+}
+
+/*Кнопка входу з Google*/
+.hide {
+  display: none; /* Початковий стан приховано */
+}
+#signin:checked ~ #wrapper,
+#signin:checked ~ #google-btn {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0.1s;
+}
+#google-btn button {
+  background-color: #263139;
+  color: rgb(255, 255, 255);
+  font-family: 'Inter', sans-serif;
+  text-transform: uppercase;
+  font-size: 20px;
+  font-weight: 300;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+#google-btn button:hover {
+  background-color: #171e23;
+}
+#google-btn {
+  opacity: 0;
+  visibility: hidden;
+  transition: visibility 0s, opacity 0.5s ease-in-out;
+}
+
+/*Повідомлення про вхід*/
+.message {
+  background-color: rgba(76, 99, 175, 0.1);
+  color: white;
+  padding: 15px;
+  border-radius: 10px;
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000; /* Щоб повідомлення було поверх усіх елементів */
+  transition: opacity 0.5s;
+}
+
+.hide {
+  opacity: 0;
+}
+
+/*-----Сторінка верифікації-----*/
+.body_verification{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(68, 76, 84, 0.75);
+  background-size: cover;
+  background-position: center;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100%;
+}
+/*Надписи для поля верифікації*/
+.label_verification {
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-block;
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  font-weight: 300;
+  text-transform: uppercase;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  width: auto;
+  text-align: center;
+}
+.container_verification{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 150px;
+  height: 100vh;
+  width: 100%;
+  text-align: center;
+}
+
+#error-container {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 640px;
+  z-index: 1000; /* Переконуємося, що помилки з'являються над іншими елементами */
+
+}
+
+.errors {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+  border-radius: 4px;
+  background-color: rgba(52, 48, 48, 0.53);
+  color: #da0d0d;
+  padding: 8px;
+  margin-top: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  /* Змініть позиціювання та ширину, якщо потрібно */
+}
+.new_label{
+  color: #ffffff;
+  cursor: pointer;
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  font-weight: 300;
+  opacity: .8;
+  margin: 0 auto; /* центрування по горизонталі */
+  margin-bottom: 30px; /* відстань знизу */
+  text-transform: uppercase;
+  text-align: center; /* центрування тексту всередині блоку */
+
+}
+.new_label:hover {
+  transition: all .3s cubic-bezier(.6,0,.4,1);
+  opacity: 1;
+}
+.new_label2{
+  color: #ffffff;
+  cursor: pointer;
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+   opacity: .8;
+  margin: 0 auto; /* центрування по горизонталі */
+  margin-bottom: 30px; /* відстань знизу */
+  text-transform: uppercase;
+  text-align: center; /* центрування тексту всередині блоку */
+}
+.button_captcha{
+  background: #141514;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  text-transform: uppercase;
+  font-size: 20px;
+  font-weight: 300;
+  height: 75px;
+  width: 100%;
+
+  overflow: hidden;
+  transition: all .3s cubic-bezier(.6,0,.4,1);
+}
