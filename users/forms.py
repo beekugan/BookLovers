@@ -1,5 +1,7 @@
 from django import forms
-from .models import Faculty, Speciality
+
+from .models import Faculty, User, Speciality
+
 
 class RegisterForm(forms.Form):
     """Форма вибору типу користувача та email"""
@@ -34,5 +36,30 @@ class ReaderRegisterForm(forms.Form):
                 pass
 
 
-class LibrarianRegisterForm:
-    pass
+
+class LibrarianRegisterForm(forms.ModelForm):
+    """Форма реєстрації бібліотекаря після підтвердження email"""
+    first_name = forms.CharField(label="Ім'я", max_length=100)
+    last_name = forms.CharField(label="Прізвище", max_length=100)
+    phone = forms.CharField(label="Телефон", max_length=20)
+    faculty = forms.ModelChoiceField(label="Факультет", queryset=Faculty.objects.all(), required=True)
+    password = forms.CharField(label="Пароль", widget=forms.PasswordInput)
+
+    class Meta:
+        model = User
+        fields = ["first_name", "last_name", "phone", "faculty", "password"]
+
+    def save(self, commit=True, email=None):
+        user = super().save(commit=False)
+        user.email = email
+        user.username = email
+        user.type_user = "librarian"
+        user.set_password(self.cleaned_data["password"])
+        if commit:
+            user.save()
+        return user
+
+
+class EmailConfirmationForm(forms.Form):
+    """Форма підтвердження email через код"""
+    code = forms.CharField(label="Код підтвердження", max_length=6)

@@ -1,10 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Home</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block content %}
+<h2>Профіль користувача</h2>
+<p><strong>Ім'я:</strong> {{ user.first_name }}</p>
+<p><strong>Прізвище:</strong> {{ user.last_name }}</p>
+<p><strong>Email:</strong> {{ user.email }}</p>
+<p><strong>Телефон:</strong> {{ user.phone }}</p>
+<p><strong>Тип користувача:</strong> {{ user.type_user }}</p>
+
+{% if user.type_user == "reader" %}
+    <p><strong>Факультет:</strong> {{ user.readerspeciality.faculty }}</p>
+    <p><strong>Спеціальність:</strong> {{ user.readerspeciality.speciality }}</p>
+{% endif %}
+
+<a href="{% url 'logout' %}">Вийти</a>
+{% endblock %}
