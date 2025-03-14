@@ -16,65 +16,63 @@
   <form method="post">
     {% csrf_token %}
 
-    <input type="hidden" name="form_action" id="formAction" value="signup" />
-    <input id="signup" name="action" type="radio" value="signup" checked />
-    <label class="label_login" for="signup">Реєстрація</label>
+    <label class="label_login">{{ form.type_user.label }}</label>
+    <div class="custom-select-container">
+        <div class="custom-select-selected">Виберіть тип користувача</div>
+        <div class="custom-select-options">
+            {% for value, label in form.type_user.field.choices %}
+                <div class="custom-select-option" data-value="{{ value }}">{{ label }}</div>
+            {% endfor %}
+        </div>
+    </div>
 
-    {% if form %}
-      <div id="wrapper">
+    <!-- Правильне приховане поле -->
+    <input type="hidden" name="type_user" id="hiddenTypeUser">
 
-
-        <p>
-          <input type="email" name="email" id="email" placeholder="Пошта" class="{{ form.email.field.widget.attrs.class }}" />
-        </p>
-        <p>
-          <div class="password-container">
-            <input type="password" name="password1" id="pass" placeholder="Пароль" class="{{ form.password1.field.widget.attrs.class }}" />
-            <i class="fas fa-eye button_pass" data-toggle="pass"></i>
-          </div>
-        </p>
-        <p>
-          <div class="password-container">
-            <input type="password" name="password2" id="repass" placeholder="Повтор паролю" class="{{ form.password2.field.widget.attrs.class }}" />
-            <i class="fas fa-eye button_pass" data-toggle="repass"></i>
-          </div>
-        </p>
-      </div>
-    {% endif %}
+    <label class="label_login">{{ form.email.label }}</label>
+    {{ form.email }}
 
     <button class="button_llr" type="submit" id="submitBtn">Зареєструватися</button>
   </form>
-
-  <div id="error-container">
-    {% if form.non_field_errors %}
-      <div class="errors global-errors">{{ form.non_field_errors }}</div>
-    {% endif %}
-    {% if form.email.errors %}
-      <div class="errors">{{ form.email.errors }}</div>
-    {% endif %}
-    {% if form.password1.errors %}
-      <div class="errors">{{ form.password1.errors }}</div>
-    {% endif %}
-    {% if form.password2.errors %}
-      <div class="errors">{{ form.password2.errors }}</div>
-    {% endif %}
-  </div>
 </div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  const togglePasswordButtons = document.querySelectorAll('.button_pass');
-  togglePasswordButtons.forEach(function(btn) {
-    btn.addEventListener('click', function () {
-      var fieldId = this.getAttribute('data-toggle');
-      var passwordField = document.getElementById(fieldId);
-      var type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
-      passwordField.setAttribute('type', type);
-      this.classList.toggle('fa-eye');
-      this.classList.toggle('fa-eye-slash');
-    });
-  });
-});
-</script>
 </body>
 </html>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const selectContainer = document.querySelector(".custom-select-container");
+    const selectedElement = document.querySelector(".custom-select-selected");
+    const optionsContainer = document.querySelector(".custom-select-options");
+    const options = document.querySelectorAll(".custom-select-option");
+    const hiddenTypeUser = document.getElementById("hiddenTypeUser");
+
+    // Відкривати/закривати список
+    selectedElement.addEventListener("click", function () {
+        selectContainer.classList.toggle("active");
+    });
+
+    // Вибір опції
+    options.forEach(option => {
+        option.addEventListener("click", function () {
+            selectedElement.textContent = this.textContent;
+            hiddenTypeUser.value = this.dataset.value;  // Оновлюємо значення прихованого поля
+            selectContainer.classList.remove("active");
+        });
+    });
+
+    // Закривати список при кліку поза ним
+    document.addEventListener("click", function (e) {
+        if (!selectContainer.contains(e.target)) {
+            selectContainer.classList.remove("active");
+        }
+    });
+
+    // Перевірка перед відправкою форми
+    document.getElementById("submitBtn").addEventListener("click", function (e) {
+        if (!hiddenTypeUser.value) {
+            e.preventDefault();
+            alert("Будь ласка, виберіть тип користувача!");
+        }
+    });
+});
+</script>

@@ -16,12 +16,17 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
 from .forms import RegisterForm, ReaderRegisterForm, LibrarianRegisterForm, EmailConfirmationForm
 from .models import Speciality, ReaderSpeciality
+from .models import Faculty
+
 
 User = get_user_model()
+
 
 def register(request):
     """ Вибір типу користувача та email """
     if request.method == "POST":
+        print(request.POST)  # Дивись, чи приходить type_user
+
         form = RegisterForm(request.POST)
         if form.is_valid():
             type_user = form.cleaned_data["type_user"]
@@ -31,11 +36,9 @@ def register(request):
                 return redirect("register_reader", email=email)
 
             elif type_user == "librarian":
-                # Генерація 6-значного коду підтвердження
                 confirmation_code = f"{random.randint(100000, 999999)}"
-                cache.set(f"email_code_{email}", confirmation_code, timeout=300)  # Зберігаємо код на 5 хв
+                cache.set(f"email_code_{email}", confirmation_code, timeout=300)
 
-                # Відправка email
                 send_mail(
                     "Код підтвердження реєстрації",
                     f"Ваш код підтвердження: {confirmation_code}",
@@ -49,7 +52,6 @@ def register(request):
     else:
         form = RegisterForm()
     return render(request, "users/register.html", {"form": form})
-
 
 def confirm_email(request, uid):
     """ Підтвердження email бібліотекаря """
@@ -97,7 +99,6 @@ def register_librarian(request, email):
     else:
         form = LibrarianRegisterForm()
     return render(request, "users/register_librarian.html", {"form": form})
-
 
 def register_reader(request, email):
     """Реєстрація читача"""
@@ -166,3 +167,13 @@ def logout_view(request):
     """Вихід з облікового запису"""
     logout(request)
     return redirect("login")
+
+def get_faculties(request):
+    faculties = Faculty.objects.all().values("id", "name")
+    data = {"faculties": list(faculties)}
+    return JsonResponse(data)
+
+def register_view(request):
+    faculties = Faculty.objects.all()  # Отримуємо всі факультети
+    print("Факультети передані в шаблон:", faculties)
+    return render(request, "register_reader.html", {"faculties": faculties})

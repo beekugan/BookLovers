@@ -1,0 +1,258 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
+
+html, body {
+    height: 100%;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #999999;
+}
+.div_reset_data form{
+    margin-top: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 450px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 20px;
+    position: relative;
+    width: 100%;
+    transform: scale(0.9);
+}
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 450px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 20px;
+    position: relative;
+    width: 100%;
+    transform: scale(0.9); /* Збільшення розміру форми на 20% */
+}
+.input {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: #333;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+}
+.input, select {
+    padding: 10px;
+    margin: 5px 0;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 16px;
+    color: #333;
+    outline: none;
+    box-sizing: border-box; /* Включення padding і border в розрахунок ширини */
+}
+
+.input:focus, select:focus {
+    border-color: #4d4747;
+}
+
+.submit {
+    height: 60px;
+    border: none;
+    background-color: #4d4747;
+    color: #fff;
+    padding: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.submit:hover {
+    background-color: #332f2f;
+}
+
+.flex {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.flex .input, .flex select {
+    flex: 1; /* Забезпечення однакової ширини для всіх елементів у контейнері */
+}
+
+.title, .message, .signin {
+    color: #333;
+    text-align: center;
+}
+
+.title {
+
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.title::before {
+    content: '';
+    position: absolute;
+    top: 6%;
+    left: 33%;
+    transform: translate(-100%, -50%);
+    width: 15px;
+    height: 15px;
+    background-color: #4d4747;
+    border-radius: 50%;
+    animation: pulse 1s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.5);
+        opacity: 0.7;
+    }
+}
+
+textarea.input {
+    resize: none; /* Вимкнення можливості зміни розміру textarea */
+}
+select {
+    cursor: pointer;
+    appearance: none; /* Видаляє стандартний стиль браузера, може потребувати префіксів для деяких браузерів */
+    background-color: #fff;
+    padding: 12px 35px 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 16px;
+    color: #757474;
+    box-sizing: border-box;
+    transition: border-color 0.3s, background-color 0.3s;
+    height: 45px; /* Чітко визначена висота для кращого контролю */
+}
+
+select:hover {
+    background-color: #f7f7f7;
+}
+
+select:focus {
+    border-color: #4d4747;
+    outline: none;
+}
+.select2-container .select2-selection--single {
+    height: 45px; /* Задана висота */
+    border-radius: 10px; /* Заокруглені кути */
+}
+
+.select2-container--default .select2-selection--single {
+    border: 1px solid #ccc; /* Стилізація рамки */
+    background-color: #fff; /* Фоновий колір */
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 43px; /* Центрування тексту по вертикалі */
+    color: #333; /* Колір тексту */
+    padding-left: 15px; /* Відступ тексту зліва */
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 43px; /* Висота стрілки */
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    width: 20px; /* Ширина стрілки */
+}
+
+.select {
+    appearance: none;  /* Видаліть стандартний вигляд селектора */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px 35px 10px 10px;  /* Патинг справа більший для іконки */
+    border-radius: 10px;
+    font-size: 16px;
+    background-image: url('data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="%2300237A"%3E%3Cpath d="M6 8l4 4 4-4z"/%3E%3C/svg%3E');
+    background-repeat: no-repeat;
+    background-position: right 10px center;  /* Позиціонування іконки */
+    background-size: 25px;  /* Розмір іконки */
+    box-sizing: border-box;  /* Включення padding і border в розрахунок ширини */
+}
+
+.div_reset_data form input {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: #333;
+    margin-top: -20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+     padding: 10px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 16px;
+    color: #333;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.div_reset_data form select{
+    appearance: none;  /* Видаліть стандартний вигляд селектора */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px 35px 10px 10px;  /* Патинг справа більший для іконки */
+    border-radius: 10px;
+    font-size: 16px;
+     margin-top: -20px;
+    background-image: url('data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="%2300237A"%3E%3Cpath d="M6 8l4 4 4-4z"/%3E%3C/svg%3E');
+    background-repeat: no-repeat;
+    background-position: right 10px center;  /* Позиціонування іконки */
+    background-size: 25px;  /* Розмір іконки */
+    box-sizing: border-box;
+     padding: 10px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 16px;
+    color: #333;
+    outline: none;
+    box-sizing: border-box;
+}
+.div_reset_data form label {
+    display: none;
+}
+.title2 {
+    color: #333;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+
+     margin-bottom: -20px;
+}
+.div_reset_data form textarea {
+    resize: none;
+    width: 426px;
+     margin-top: -20px;
+    border-radius: 10px;
+font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: #333;
+    padding:10px;
+}

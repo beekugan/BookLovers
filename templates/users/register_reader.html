@@ -1,32 +1,43 @@
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    
-    <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const facultyField = document.querySelector("select[name='faculty']");
-        const specialityField = document.querySelector("select[name='speciality']");
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Реєстрація читача</title>
+    <link rel="stylesheet" href="{% static 'css/form.css' %}" />
+</head>
+<body>
+    {% block content %}
+    <form method="post">
+        {% csrf_token %}
+        <p class="title">Реєстрація читача</p>
+        <p class="message">Будь ласка, заповніть форму для реєстрації.</p>
 
-        function updateSpecialities() {
-            const facultyId = facultyField.value;
+        <div class="flex">
+            <input required="" placeholder="Ім'я" type="text" id="first_name" name="first_name" class="input">
+            <input required="" placeholder="Прізвище" type="text" id="last_name" name="last_name" class="input">
+        </div>
 
-            fetch(`/get_specialities/?faculty_id=${facultyId}`)
-                .then(response => response.json())
-                .then(data => {
-                    specialityField.innerHTML = "";
-                    data.specialities.forEach(speciality => {
-                        const option = document.createElement("option");
-                        option.value = speciality.id;
-                        option.textContent = speciality.name;
-                        specialityField.appendChild(option);
-                    });
-                });
-        }
+        <input required="" placeholder="Номер телефону" type="tel" id="phone" name="phone" class="input">
 
-        facultyField.addEventListener("change", updateSpecialities);
-    });
-</script>
+        <select id="faculty" name="faculty" class="select">
+    <option value="" disabled selected>Виберіть факультет...</option>
+    {% for faculty in faculties %}
+        <option value="{{ faculty.id }}">{{ faculty.name }}</option>
+    {% endfor %}
+</select>
 
+        <select id="speciality" name="speciality" class="select">
+            <option value="" disabled selected>Оберіть спеціальність...</option>
+            <!-- Спеціальності будуть оновлюватись через JS -->
+        </select>
 
-    <button type="submit">Зареєструватися</button>
-</form>
+        <input required="" placeholder="Пароль" type="password" id="password" name="password" class="input">
+
+        <button type="submit" class="submit">Зареєструватися</button>
+        <p class="signin">З повагою,<br>Команда сайту</p>
+    </form>
+    {% endblock %}
+<script src="{% static 'js/faculties.js' %}"></script>
+</body>
+
+</html>

@@ -154,7 +154,7 @@ input[type=password],[type=email] {
   font-weight: 300;
   height: 75px;
   width: 100%;
-  margin-top: -40px;
+  margin-top: 30px;
   overflow: hidden;
   transition: all .3s cubic-bezier(.6,0,.4,1);
 }
@@ -183,11 +183,71 @@ input[type=password],[type=email] {
 /*Лого на сторінці логіна*/
 .logo_log {
   display: block;
-  margin: 0 auto 20px;
-  width: 200px;
+  margin: 0 auto 30px;
+  width: 150px;
   height: auto;
 }
+.custom-select-container {
+    position: relative;
+    width: 94%;
+    margin-bottom: 15px;
+}
 
+.custom-select-selected {
+    background-color: #ffffff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  color: #000000;
+  font-weight: 300;
+    opacity: 1;
+    width: 100%;
+
+    padding: 22px 15px;
+    border: 2px solid #ffffff;
+    border-radius: 5px;
+    transition: all .3s cubic-bezier(.6,0,.4,1);
+}
+
+.custom-select-selected:hover {
+    opacity: .7;
+}
+
+
+.custom-select-options {
+    display: none;
+    position: absolute;
+    width: 105.5%;
+    background-color: #807d7d;
+    border: 2px solid #ffffff;
+    border-radius: 5px;
+    z-index: 10;
+    max-height: 100px;
+    overflow-y: auto;
+}
+
+.custom-select-option {
+    padding: 10px;
+    font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  color: #000000;
+  font-weight: 300;
+
+
+    cursor: pointer;
+    opacity: 0.7;
+    transition: all .3s cubic-bezier(.6,0,.4,1);
+}
+
+.custom-select-option:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    opacity: 1;
+}
+
+.custom-select-container.active .custom-select-options {
+    display: block;
+}
 /*Кнопка входу з Google*/
 .hide {
   display: none; /* Початковий стан приховано */

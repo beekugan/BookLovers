@@ -4,6 +4,7 @@ from users.views import (register, register_reader, get_specialities, register_l
                          confirm_email, home, login_view, logout_view)
 
 from books.views import add_genre
+from users.views import get_faculties
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -17,4 +18,5 @@ urlpatterns = [
     path("logout/", logout_view, name="logout"),
 
     path("home/", home, name="home"),
+path("get_faculties/", get_faculties, name="get_faculties"),
 ]
