@@ -1,14 +1,31 @@
+{% load static %}
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Login</title>
+  <meta charset="UTF-8" />
+  <title>Вхід</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
-<body>
-<form method="post">
+
+<body class="body_login">
+<div class="container">
+  <img class="logo_log" src="{% static 'img/logo.png' %}" alt="Лого" />
+
+  <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Увійти</button>
-</form>
+
+    <label class="label_login" for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
+    {{ form.username }}
+
+    <label class="label_login" for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
+    {{ form.password }}
+
+    <button class="button_llr" type="submit">Увійти</button>
+  </form>
+
+  <p class="auth-footer">Ще не маєте акаунту? <a href="{% url 'register' %}" class="link">Зареєструватися</a></p>
+</div>
 </body>
 </html>

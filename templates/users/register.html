@@ -18,12 +18,16 @@
 
     <label class="label_login">{{ form.type_user.label }}</label>
     <div class="custom-select-container">
-        <div class="custom-select-selected">Виберіть тип користувача</div>
+        <div class="custom-select-selected">Виберіть тип користувача
+        <i class="fas fa-chevron-down custom-select-arrow"></i></div>
+
         <div class="custom-select-options">
             {% for value, label in form.type_user.field.choices %}
                 <div class="custom-select-option" data-value="{{ value }}">{{ label }}</div>
             {% endfor %}
+
         </div>
+
     </div>
 
     <!-- Правильне приховане поле -->
