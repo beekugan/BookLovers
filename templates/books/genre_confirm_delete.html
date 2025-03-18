@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Видалити книгу</title>
+</head>
+<body>
+    <h1>Ви впевнені, що хочете видалити "{{ genre }}"?</h1>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Так, видалити</button>
+    </form>
+    <p><a href="{% url 'tools' %}">Назад</a></p>
+</body>
+</html>
