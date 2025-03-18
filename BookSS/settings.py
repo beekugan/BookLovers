@@ -86,7 +86,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': r'G:\Мій Диск\book_database\db.sqlite3',
         'OPTIONS': {
-            'timeout': 20,
+            'timeout': 10,
         }
     }
 }

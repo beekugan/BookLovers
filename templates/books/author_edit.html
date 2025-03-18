@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редагування авторів</title>
+     <style>
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 300px; /* Опціонально, щоб задати ширину форми */
+        }
+
+        label, input, button {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px; /* Відступ між елементами */
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        select {
+            margin-bottom: 15px; /* Відступ між випадаючим списком та формою */
+        }
+    </style>
+</head>
+<body>
+
+<h2>Редагування авторів</h2>
+
+<select id="authorSelect">
+    <option value="">Оберіть автора</option>
+    {% for author in authors %}
+        <option value="{{ author.id }}">{{ author.name_author }} {{ author.surname_author }}</option>
+    {% endfor %}
+</select>
+
+<form id="authorForm" method="post" action="">
+    {% csrf_token %}
+    <input type="hidden" name="author_id" id="author_id">
+
+    <label>Ім'я:</label>
+    <input type="text" name="name_author" id="author_name" required>
+
+    <label>Прізвище:</label>
+    <input type="text" name="surname_author" id="author_surname" required>
+
+    <button type="submit">Зберегти</button>
+    <button type="button" id="deleteButton" disabled>Видалити</button>
+</form>
+<p><a href="{% url 'tools' %}">Назад</a></p>
+<script>
+    document.getElementById("authorSelect").addEventListener("change", function() {
+        let authorId = this.value;
+        if (authorId) {
+            fetch(`/authors/edit/${authorId}/`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("author_id").value = data.id;
+                document.getElementById("author_name").value = data.name_author;
+                document.getElementById("author_surname").value = data.surname_author;
+                document.getElementById("authorForm").action = `/authors/edit/${data.id}/`;
+
+                let deleteButton = document.getElementById("deleteButton");
+                deleteButton.dataset.authorId = data.id;
+                deleteButton.disabled = false;  // Увімкнути кнопку видалення
+            });
+        }
+    });
+
+    document.getElementById("deleteButton").addEventListener("click", function() {
+        let authorId = this.dataset.authorId;
+        if (!authorId) return;
+
+        if (confirm("Ви впевнені, що хочете видалити автора?")) {
+            fetch(`/authors/delete/${authorId}/`, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
+                }
+            }).then(() => location.reload());
+        }
+    });
+</script>
+
+</body>
+</html>

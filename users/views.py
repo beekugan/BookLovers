@@ -91,7 +91,7 @@ def register_librarian(request, email):
                 user.set_password(form.cleaned_data["password"])
                 user.save()
                 login(request, user)
-                return redirect("users/home")
+                return redirect("home")
 
             except IntegrityError:
                 return HttpResponse("Користувач з таким email вже існує.", status=400)
