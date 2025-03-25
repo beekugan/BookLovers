@@ -72,7 +72,7 @@ def book_delete(request, pk):
     if request.method == "POST":
         book.delete()
         return redirect('book_edit')
-    return render(request, 'books/book_confirm_delete.html', {'book': book})
+    return render(request, 'books/book_edit.html', {'book': book})
 
 def book_detail(request, book_id):
     try:
@@ -209,4 +209,4 @@ def publisher_delete(request, pk):
     if request.method == "POST":
         publisher.delete()
         return redirect('publisher_edit')
-    return render(request, 'books/publisher_confirm_delete.html', {'publisher': publisher})
+    return render(request, 'books/publisher_edit.html', {'publisher': publisher})
