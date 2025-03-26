@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('library', '0001_initial'),
+        ('logbook', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
@@ -28,6 +28,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='lineservicehistory',
             name='service_history',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='library.servicehistory'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='logbook.servicehistory'),
         ),
     ]

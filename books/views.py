@@ -54,7 +54,8 @@ def book_update(request, pk=None):
             'name': book.name,
             'publisher': book.publisher.id if book.publisher else None,
             'author': book.author.id if book.author else None,
-            'genre': book.genre.id if book.genre else None  # Один жанр
+            'genre': book.genre.id if book.genre else None,
+            'quantity': book.quantity  # Додаємо кількість книг
         }
         return JsonResponse(data)
 
@@ -82,13 +83,11 @@ def book_detail(request, book_id):
             "name": book.name,
             "publisher_id": book.publisher.id if book.publisher else None,
             "author_id": book.author.id if book.author else None,
-            "genre_id": book.genre.id if book.genre else None  # Один жанр
+            "genre_id": book.genre.id if book.genre else None,
+            "quantity": book.quantity
         })
     except Book.DoesNotExist:
         return JsonResponse({"error": "Книгу не знайдено"}, status=404)
-
-
-
 
 
 # ==== АВТОРИ ====

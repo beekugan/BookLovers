@@ -25,13 +25,20 @@ class Genre(models.Model):
 
 # Книга
 class Book(models.Model):
+    STATUS_CHOICES = [
+        ('available', 'Available'),
+        ('borrowed', 'Borrowed'),
+    ]
+
     name = models.CharField(max_length=255)
     publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     genre = models.ForeignKey(Genre, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='available')
 
     def __str__(self):
-        return self.name
+        return f"{self.name} ({self.quantity} шт.)"
 
 
 

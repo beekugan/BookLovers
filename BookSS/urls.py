@@ -10,6 +10,7 @@ from books.views import (
     publisher_create, publisher_update, publisher_delete
 
 )
+from logbook.views import (issue_book, return_book, user_history)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -54,4 +55,11 @@ urlpatterns = [
     path('publishers/edit/', publisher_update, name='publisher_edit'),  # Сторінка вибору видавництва для редагування
     path('publishers/edit/<int:pk>/', publisher_update, name='publisher_edit_detail'),  # Детальне редагування
     path('publishers/delete/<int:pk>/', publisher_delete, name='publisher_delete'),
+
+    # Видача/повернення
+    path('issue/', issue_book, name='issue_book'),
+    path('return/', return_book, name='return_book'),
+
+    # Перегляд історії видач (Користувач)
+    path("history/", user_history, name="user_history"),
 ]

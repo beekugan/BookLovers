@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Редагування книг</title>
-     <style>
+    <style>
         form {
             display: flex;
             flex-direction: column;
-            width: 300px; /* Опціонально, щоб задати ширину форми */
+            width: 300px; 
         }
 
         label, input, button {
             display: block;
             width: 100%;
-            margin-bottom: 10px; /* Відступ між елементами */
+            margin-bottom: 10px; 
         }
 
         button {
@@ -22,37 +22,36 @@
         }
 
         select {
-            margin-bottom: 15px; /* Відступ між випадаючим списком та формою */
+            margin-bottom: 15px;
         }
     </style>
     <script>
         function loadBookData() {
-    let bookId = document.getElementById("bookSelect").value;
-    if (!bookId) return;
+            let bookId = document.getElementById("bookSelect").value;
+            if (!bookId) return;
 
-    fetch(`/books/detail/${bookId}/`)
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            fetch(`/books/detail/${bookId}/`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("Отримані дані:", data);
+
+                document.getElementById("book_id").value = data.id;
+                document.getElementById("book_name").value = data.name;
+                document.getElementById("book_publisher").value = data.publisher_id || "";
+                document.getElementById("book_author").value = data.author_id || "";
+                document.getElementById("book_genre").value = data.genre_id || "";
+                document.getElementById("book_quantity").value = data.quantity || 1; // Додаємо значення кількості
+
+                document.getElementById("bookForm").action = `/books/edit/${data.id}/`;
+                document.getElementById("deleteButton").dataset.bookId = data.id;
+            })
+            .catch(error => console.error("Помилка завантаження книги:", error));
         }
-        return response.json();
-    })
-    .then(data => {
-        console.log("Отримані дані:", data);
-
-        document.getElementById("book_id").value = data.id;
-        document.getElementById("book_name").value = data.name;
-
-        // Встановлення вибраних значень
-        document.getElementById("book_publisher").value = data.publisher_id || "";
-        document.getElementById("book_author").value = data.author_id || "";
-        document.getElementById("book_genre").value = data.genre_id || "";
-
-        document.getElementById("bookForm").action = `/books/edit/${data.id}/`;
-        document.getElementById("deleteButton").dataset.bookId = data.id;
-    })
-    .catch(error => console.error("Помилка завантаження книги:", error));
-}
 
         function deleteBook() {
             let bookId = document.getElementById("deleteButton").dataset.bookId;
@@ -90,32 +89,37 @@
     <input type="text" name="name" id="book_name">
 
     <label>Видавництво:</label>
-<select name="publisher" id="book_publisher">
-    <option value="">-- Виберіть видавництво --</option>
-    {% for publisher in publishers %}
-        <option value="{{ publisher.id }}">{{ publisher.name_publisher }}</option>
-    {% endfor %}
-</select>
+    <select name="publisher" id="book_publisher">
+        <option value="">-- Виберіть видавництво --</option>
+        {% for publisher in publishers %}
+            <option value="{{ publisher.id }}">{{ publisher.name_publisher }}</option>
+        {% endfor %}
+    </select>
 
-<label>Автор:</label>
-<select name="author" id="book_author">
-    <option value="">-- Виберіть автора --</option>
-    {% for author in authors %}
-        <option value="{{ author.id }}">{{ author.name_author }} {{ author.surname_author }}</option>
-    {% endfor %}
-</select>
+    <label>Автор:</label>
+    <select name="author" id="book_author">
+        <option value="">-- Виберіть автора --</option>
+        {% for author in authors %}
+            <option value="{{ author.id }}">{{ author.name_author }} {{ author.surname_author }}</option>
+        {% endfor %}
+    </select>
 
-<label>Жанр:</label>
-<select name="genre" id="book_genre">
-    <option value="">-- Виберіть жанр --</option>
-    {% for genre in genres %}
-        <option value="{{ genre.id }}">{{ genre.name_genre }}</option>
-    {% endfor %}
-</select>
+    <label>Жанр:</label>
+    <select name="genre" id="book_genre">
+        <option value="">-- Виберіть жанр --</option>
+        {% for genre in genres %}
+            <option value="{{ genre.id }}">{{ genre.name_genre }}</option>
+        {% endfor %}
+    </select>
+
+    <label>Кількість примірників:</label>
+    <input type="number" name="quantity" id="book_quantity" min="1" value="1">
 
     <button type="submit">Зберегти</button>
     <button type="button" id="deleteButton" onclick="deleteBook()">Видалити</button>
 </form>
+
 <p><a href="{% url 'tools' %}">Назад</a></p>
+
 </body>
 </html>

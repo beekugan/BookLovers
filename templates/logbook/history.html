@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Історія ваших видач</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #007BFF;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .status-returned {
+            color: green;
+            font-weight: bold;
+        }
+        .status-active {
+            color: red;
+            font-weight: bold;
+        }
+        .no-history {
+            text-align: center;
+            padding: 20px;
+            font-size: 16px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Історія ваших видач</h2>
+
+        {% if histories %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Код видачі</th>
+                        <th>Книги</th>
+                        <th>Дата видачі</th>
+                        <th>Дата повернення</th>
+                        <th>Статус</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for history in histories %}
+                        <tr>
+                            <td>{{ history.loan_code }}</td>
+                            <td>
+                                <ul>
+                                    {% for loan in history.loan_items.all %}
+                                        <li>{{ loan.book.name }} ({{ loan.get_status_display }})</li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <td>{{ history.created_at|date:"d.m.Y" }}</td>
+                            <td>
+                                {% for loan in history.loan_items.all %}
+                                    {% if loan.date_when_returned %}
+                                        {{ loan.date_when_returned|date:"d.m.Y" }}
+                                    {% else %}
+                                        Не повернуто
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% with first_loan=history.loan_items.all|dictsort:"status"|first %}
+                                    {% if first_loan and first_loan.status == "returned" %}
+                                        <span class="status-returned">Повернуто</span>
+                                    {% else %}
+                                        <span class="status-active">Активно!</span>
+                                    {% endif %}
+                                {% endwith %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="no-history">У вас ще немає видач.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
