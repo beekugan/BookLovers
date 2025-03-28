@@ -37,7 +37,7 @@ form {
     border-radius: 20px;
     position: relative;
     width: 100%;
-    transform: scale(0.9); /* Збільшення розміру форми на 20% */
+    transform: scale(0.9);
 }
 .input {
     font-family: 'Inter', sans-serif;

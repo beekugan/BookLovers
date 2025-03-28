@@ -1,41 +1,80 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Інструменти бібліотекаря</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
-    <h1>Інструменти бібліотекаря</h1>
+   <div class="navigation-card">
+    {% if user.type_user == "reader" %}
+        <a href="#" class="tab"><i class="fas fa-book"></i></a>
+        <a href="#" class="tab"><i class="fas fa-list"></i></a>
+    {% else %}
+        <a href="{% url 'tools' %}" class="tab"><i class="fas fa-plus-circle"></i></a>
+        <a href="#" class="tab"><i class="fas fa-user-cog"></i></a>
+    {% endif %}
+    <a href="{% url 'logout' %}" class="tab"><i class="fas fa-sign-out-alt"></i></a>
+</div>
 
-    <h2>📚 Книги</h2>
-    <ul>
-        <li><a href="{% url 'book_add' %}">Додати книгу</a></li>
-        <li><a href="{% url 'book_edit' %}">Редагувати/Видалити книгу</a></li>
-    </ul>
+    <div class="profile-container">
+        <div class="profile-card">
+            <h2>Інструменти бібліотекаря</h2>
 
-    <h2>✍ Автори</h2>
-    <ul>
-        <li><a href="{% url 'author_add' %}">Додати автора</a></li>
-        <li><a href="{% url 'author_edit' %}">Редагувати/Видалити автора</a></li>
-    </ul>
+            <div class="category">
+                <div class="category-box">
+                    <h3>📚 Книги</h3>
+                    <ul>
+                        <li><a href="{% url 'book_add' %}">Додати книгу</a></li>
+                        <li><a href="{% url 'book_edit' %}">Редагувати/Видалити книгу</a></li>
+                    </ul>
+                </div>
 
-    <h2>🎭 Жанри</h2>
-    <ul>
-        <li><a href="{% url 'genre_add' %}">Додати жанр</a></li>
-        <li><a href="{% url 'genre_edit' %}">Редагувати/Видалити жанр</a></li>
-    </ul>
+                <div class="category-box">
+                    <h3>✍ Автори</h3>
+                    <ul>
+                        <li><a href="{% url 'author_add' %}">Додати автора</a></li>
+                        <li><a href="{% url 'author_edit' %}">Редагувати/Видалити автора</a></li>
+                    </ul>
+                </div>
 
-    <h2>🏢 Видавництва</h2>
-    <ul>
-        <li><a href="{% url 'publisher_add' %}">Додати видавництво</a></li>
-        <li><a href="{% url 'publisher_edit' %}">Редагувати/Видалити видавництво</a></li>
-    </ul>
+                <div class="category-box">
+                    <h3>🎭 Жанри</h3>
+                    <ul>
+                        <li><a href="{% url 'genre_add' %}">Додати жанр</a></li>
+                        <li><a href="{% url 'genre_edit' %}">Редагувати/Видалити жанр</a></li>
+                    </ul>
+                </div>
 
-    <h2>📖 Видача та повернення книг</h2>
-    <ul>
-        <li><a href="{% url 'issue_book' %}">Видати книгу</a></li>
-        <li><a href="{% url 'return_book' %}">Прийняти книгу</a></li>
-    </ul>
+                <div class="category-box">
+                    <h3>🏢 Видавництва</h3>
+                    <ul>
+                        <li><a href="{% url 'publisher_add' %}">Додати видавництво</a></li>
+                        <li><a href="{% url 'publisher_edit' %}">Редагувати/Видалити видавництво</a></li>
+                    </ul>
+                </div>
+            </div>
 
+            <div class="category">
+                <div class="category-box">
+                    <h3>📖 Видача книг</h3>
+                    <ul>
+                        <li><a href="{% url 'issue_book' %}">Видати книгу</a></li>
+                    </ul>
+                </div>
+
+                <div class="category-box">
+                    <h3>📚 Повернення книг</h3>
+                    <ul>
+                        <li><a href="{% url 'return_book' %}">Прийняти книгу</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </body>
 </html>

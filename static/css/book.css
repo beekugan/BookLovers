@@ -1,0 +1,93 @@
+/* Загальні стилі */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    height: 100vh; /* Для того, щоб можна було вирівняти форму по вертикалі */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Форма */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 450px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    transform: scale(1);
+}
+
+.title2 {
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.input {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: #333;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.input, select {
+    padding: 10px;
+    margin: 5px 0;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 16px;
+    color: #333;
+    outline: none;
+    box-sizing: border-box; /* Включення padding і border в розрахунок ширини */
+}
+
+.input:focus, select:focus {
+    border-color: #4d4747;
+}
+
+.submit {
+    height: 60px;
+    border: none;
+    background-color: #4d4747;
+    color: #fff;
+    padding: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.submit:hover {
+    background-color: #332f2f;
+}
+
+.message {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.message a {
+    color: #007BFF;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.message a:hover {
+    text-decoration: underline;
+}
+

@@ -62,4 +62,6 @@ urlpatterns = [
 
     # Перегляд історії видач (Користувач)
     path("history/", user_history, name="user_history"),
+
+
 ]

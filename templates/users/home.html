@@ -1,17 +1,40 @@
-{% extends "base.html" %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Профіль</title>
+    <link rel="stylesheet" href="{% static 'css/account.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
 
-{% block content %}
-<h2>Профіль користувача</h2>
-<p><strong>Ім'я:</strong> {{ user.first_name }}</p>
-<p><strong>Прізвище:</strong> {{ user.last_name }}</p>
-<p><strong>Email:</strong> {{ user.email }}</p>
-<p><strong>Телефон:</strong> {{ user.phone }}</p>
-<p><strong>Тип користувача:</strong> {{ user.type_user }}</p>
+<div class="navigation-card">
+    {% if user.type_user == "reader" %}
+        <a href="#" class="tab"><i class="fas fa-book"></i></a>
+        <a href="#" class="tab"><i class="fas fa-list"></i></a>
+    {% else %}
+        <a href="{% url 'tools' %}" class="tab"><i class="fas fa-plus-circle"></i></a>
+        <a href="#" class="tab"><i class="fas fa-user-cog"></i></a>
+    {% endif %}
+    <a href="{% url 'logout' %}" class="tab"><i class="fas fa-sign-out-alt"></i></a>
+</div>
 
-{% if user.type_user == "reader" %}
-    <p><strong>Факультет:</strong> {{ user.readerspeciality.faculty }}</p>
-    <p><strong>Спеціальність:</strong> {{ user.readerspeciality.speciality }}</p>
-{% endif %}
+<div class="profile-container">
+    <div class="profile-card">
+        <h2>Профіль користувача</h2>
+        <p class="label1"><strong>Ім'я:</strong> {{ user.first_name }}</p>
+        <p class="label1"><strong>Прізвище:</strong> {{ user.last_name }}</p>
+        <p class="label1"><strong>Email:</strong> {{ user.email }}</p>
+        <p class="label1"><strong>Телефон:</strong> {{ user.phone }}</p>
+        <p class="label1"><strong>Тип користувача:</strong> {{ user.type_user }}</p>
 
-<a href="{% url 'logout' %}">Вийти</a>
-{% endblock %}
+        {% if user.type_user == "reader" %}
+            <p class="label1"><strong>Факультет:</strong> {{ user.readerspeciality.faculty }}</p>
+            <p class="label1"><strong>Спеціальність:</strong> {{ user.readerspeciality.speciality }}</p>
+        {% endif %}
+    </div>
+</div>
+
+</body>
+</html>

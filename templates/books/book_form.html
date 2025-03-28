@@ -1,16 +1,50 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <title>{{ book_form }}</title>
+    <title>Додавання книги</title>
+    <link rel="stylesheet" href="{% static 'css/book.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
-    <h1>{{ title }}</h1>
-    <form method="post">
+    {% block content %}
+
+        <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Зберегти</button>
-    </form>
-    <p><a href="{% url 'tools' %}">Назад</a></p>
+    <p class="title2">Додати книгу</p>
+    <input required="" placeholder="Назва книги" type="text" id="name" name="name" class="input">
+
+    <!-- Селект для автора -->
+    <select id="author" name="author" class="select">
+        <option value="" disabled selected>Оберіть автора...</option>
+        {% for author in authors %}
+            <option value="{{ author.id }}">{{ author.name_author }} {{ author.surname_author }}</option>
+        {% endfor %}
+    </select>
+
+    <!-- Селект для видавництва -->
+    <select id="publisher" name="publisher" class="select">
+        <option value="" disabled selected>Оберіть видавництво...</option>
+        {% for publisher in publishers %}
+            <option value="{{ publisher.id }}">{{ publisher.name_publisher }}</option>
+        {% endfor %}
+    </select>
+
+    <!-- Селект для жанру -->
+    <select id="genre" name="genre" class="select">
+        <option value="" disabled selected>Оберіть жанр...</option>
+        {% for genre in genres %}
+            <option value="{{ genre.id }}">{{ genre.name_genre }}</option>
+        {% endfor %}
+    </select>
+
+    <input required="" placeholder="Кількість" type="number" id="quantity" name="quantity" class="input">
+
+    <button type="submit" class="submit">Зберегти</button>
+    <p class="message"><a href="{% url 'tools' %}">Назад</a></p>
+</form>
+
+    {% endblock %}
 </body>
 </html>

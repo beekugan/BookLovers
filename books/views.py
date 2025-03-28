@@ -7,6 +7,7 @@ from .models import Author, Genre, Publisher
 from .models import Book
 
 
+
 # Перевірка, чи користувач є бібліотекарем
 def is_librarian(user):
     return user.is_authenticated and user.type_user == 'librarian'
@@ -21,6 +22,10 @@ def tools(request):
 @login_required
 @user_passes_test(is_librarian)
 def book_create(request):
+    genres = Genre.objects.all()
+    authors = Author.objects.all()  # Отримуємо всіх авторів з БД
+    publishers = Publisher.objects.all()  # Отримуємо всі видавництва з БД
+
     if request.method == "POST":
         form = BookForm(request.POST)
         if form.is_valid():
@@ -30,8 +35,14 @@ def book_create(request):
             return redirect('book_add')
     else:
         form = BookForm()
-    return render(request, 'books/book_form.html', {'form': form, 'title': 'Додати книгу'})
 
+    return render(request, 'books/book_form.html', {
+        'form': form,
+        'title': 'Додати книгу',
+        'genres': genres,
+        'authors': authors,
+        'publishers': publishers
+    })
 @login_required
 @user_passes_test(is_librarian)
 def book_update(request, pk=None):
