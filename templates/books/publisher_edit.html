@@ -1,70 +1,76 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Редагування видавництв</title>
+    <link rel="stylesheet" href="{% static 'css/book.css' %}" />
 </head>
 <body>
+    <div class="formedit">
+        <form id="publisherForm" method="post" action="">
+            <h2 class="title2">Редагування видавництв</h2>
+            {% csrf_token %}
+            <label for="publisherSelect">Оберіть видавництво:</label>
+            <select id="publisherSelect" class="input">
+                <option value="">Оберіть видавництво</option>
+                {% for publisher in publishers %}
+                    <option value="{{ publisher.id }}">{{ publisher.name_publisher }}</option>
+                {% endfor %}
+            </select>
 
-<h2>Редагування видавництв</h2>
-<select id="publisherSelect">
-    <option value="">Оберіть видавництво</option>
-    {% for publisher in publishers %}
-        <option value="{{ publisher.id }}">{{ publisher.name_publisher }}</option>
-    {% endfor %}
-</select>
+            <input type="hidden" name="publisher_id" id="publisher_id">
+            <label for="publisher_name">Назва видавництва:</label>
+            <input type="text" name="name_publisher" id="publisher_name" class="input" required>
 
-<form id="publisherForm" method="post" action="">
-    {% csrf_token %}
-    <input type="hidden" name="publisher_id" id="publisher_id">
-    <label>Назва видавництва:</label>
-    <input type="text" name="name_publisher" id="publisher_name">
-    <button type="submit">Зберегти</button>
-    <button type="button" id="deleteButton" disabled>Видалити</button>
-</form>
-<p><a href="{% url 'tools' %}">Назад</a></p>
-<script>
-    const publisherSelect = document.getElementById("publisherSelect");
-    const publisherForm = document.getElementById("publisherForm");
-    const publisherIdField = document.getElementById("publisher_id");
-    const publisherNameField = document.getElementById("publisher_name");
-    const deleteButton = document.getElementById("deleteButton");
+            <button type="submit" class="submit">Зберегти</button>
+            <button type="button" id="deleteButton" class="submit" disabled>Видалити</button>
+        <p class="message"><a href="{% url 'tools' %}">Назад</a></p>
+        </form>
 
-    publisherSelect.addEventListener("change", function() {
-        let publisherId = this.value;
-        if (publisherId) {
-            fetch(`/publishers/edit/${publisherId}/`)
-            .then(response => response.json())
-            .then(data => {
-                publisherIdField.value = data.id;
-                publisherNameField.value = data.name_publisher;
-                publisherForm.action = `/publishers/edit/${data.id}/`;
+    </div>
 
-                deleteButton.dataset.publisherId = data.id;
-                deleteButton.disabled = false; // Увімкнути кнопку видалення
-            });
-        } else {
-            publisherIdField.value = "";
-            publisherNameField.value = "";
-            publisherForm.action = "";
-            deleteButton.disabled = true; // Вимкнути кнопку видалення
-        }
-    });
+    <script>
+        const publisherSelect = document.getElementById("publisherSelect");
+        const publisherForm = document.getElementById("publisherForm");
+        const publisherIdField = document.getElementById("publisher_id");
+        const publisherNameField = document.getElementById("publisher_name");
+        const deleteButton = document.getElementById("deleteButton");
 
-    deleteButton.addEventListener("click", function() {
-        let publisherId = this.dataset.publisherId;
-        if (!publisherId) return;
+        publisherSelect.addEventListener("change", function() {
+            let publisherId = this.value;
+            if (publisherId) {
+                fetch(`/publishers/edit/${publisherId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    publisherIdField.value = data.id;
+                    publisherNameField.value = data.name_publisher;
+                    publisherForm.action = `/publishers/edit/${data.id}/`;
 
-        if (confirm("Ви впевнені, що хочете видалити видавництво?")) {
-            fetch(`/publishers/delete/${publisherId}/`, {
-                method: "POST",
-                headers: { "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value }
-            })
-            .then(() => location.reload());
-        }
-    });
-</script>
+                    deleteButton.dataset.publisherId = data.id;
+                    deleteButton.disabled = false;
+                });
+            } else {
+                publisherIdField.value = "";
+                publisherNameField.value = "";
+                publisherForm.action = "";
+                deleteButton.disabled = true;
+            }
+        });
 
+        deleteButton.addEventListener("click", function() {
+            let publisherId = this.dataset.publisherId;
+            if (!publisherId) return;
+
+            if (confirm("Ви впевнені, що хочете видалити видавництво?")) {
+                fetch(`/publishers/delete/${publisherId}/`, {
+                    method: "POST",
+                    headers: { "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value }
+                })
+                .then(() => location.reload());
+            }
+        });
+    </script>
 </body>
 </html>

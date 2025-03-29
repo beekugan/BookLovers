@@ -1,59 +1,56 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Редагування жанрів</title>
+    <link rel="stylesheet" href="{% static 'css/book.css' %}" />
 </head>
 <body>
-
-<h2>Редагування жанрів</h2>
-<select id="genreSelect">
-    <option value="">Оберіть жанр</option>
-    {% for genre in genres %}
-        <option value="{{ genre.id }}">{{ genre.name_genre }}</option>
-    {% endfor %}
-</select>
-
-<form id="genreForm" method="post" action="">
-    {% csrf_token %}
-    <input type="hidden" name="genre_id" id="genre_id">
-    <label>Назва жанру:</label>
-    <input type="text" name="name_genre" id="genre_name">
-    <button type="submit">Зберегти</button>
-    <button type="button" id="deleteButton" disabled>Видалити</button>
-</form>
-<p><a href="{% url 'tools' %}">Назад</a></p>
-<script>
-    document.getElementById("genreSelect").addEventListener("change", function() {
-        let genreId = this.value;
-        if (genreId) {
-            fetch(`/genres/edit/${genreId}/`)
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById("genre_id").value = data.id;
-                document.getElementById("genre_name").value = data.name_genre;
-                document.getElementById("genreForm").action = `/genres/edit/${data.id}/`;
-                let deleteButton = document.getElementById("deleteButton");
-                deleteButton.dataset.genreId = data.id;
-                deleteButton.disabled = false; // Увімкнути кнопку видалення
-            });
-        }
-    });
-
-    document.getElementById("deleteButton").addEventListener("click", function() {
-        let genreId = this.dataset.genreId;
-        if (!genreId) return;
-
-        if (confirm("Ви впевнені, що хочете видалити жанр?")) {
-            fetch(`/genres/delete/${genreId}/`, {
-                method: "POST",
-                headers: { "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value }
-            })
-            .then(() => location.reload());
-        }
-    });
-</script>
-
+    <form id="genreForm" method="post" action="">
+        {% csrf_token %}
+        <h2 class="title2">Редагування жанрів</h2>
+        <select id="genreSelect" class="input">
+            <option value="">Оберіть жанр</option>
+            {% for genre in genres %}
+                <option value="{{ genre.id }}">{{ genre.name_genre }}</option>
+            {% endfor %}
+        </select>
+        <input type="hidden" name="genre_id" id="genre_id">
+        <label>Назва жанру:</label>
+        <input type="text" name="name_genre" id="genre_name" class="input">
+        <button type="submit" class="submit">Зберегти</button>
+        <button type="button" id="deleteButton" class="submit delete-button" disabled>Видалити</button>
+        <p class="message"><a href="{% url 'tools' %}">Назад</a></p>
+    </form>
+    <script>
+        document.getElementById("genreSelect").addEventListener("change", function() {
+            let genreId = this.value;
+            if (genreId) {
+                fetch(`/genres/edit/${genreId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("genre_id").value = data.id;
+                    document.getElementById("genre_name").value = data.name_genre;
+                    document.getElementById("genreForm").action = `/genres/edit/${data.id}/`;
+                    let deleteButton = document.getElementById("deleteButton");
+                    deleteButton.dataset.genreId = data.id;
+                    deleteButton.disabled = false;
+                });
+            }
+        });
+        document.getElementById("deleteButton").addEventListener("click", function() {
+            let genreId = this.dataset.genreId;
+            if (!genreId) return;
+            if (confirm("Ви впевнені, що хочете видалити жанр?")) {
+                fetch(`/genres/delete/${genreId}/`, {
+                    method: "POST",
+                    headers: { "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value }
+                })
+                .then(() => location.reload());
+            }
+        });
+    </script>
 </body>
 </html>
