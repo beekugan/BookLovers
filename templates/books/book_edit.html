@@ -1,52 +1,25 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Редагування книг</title>
-    <style>
-        form {
-            display: flex;
-            flex-direction: column;
-            width: 300px; 
-        }
-
-        label, input, button {
-            display: block;
-            width: 100%;
-            margin-bottom: 10px; 
-        }
-
-        button {
-            cursor: pointer;
-        }
-
-        select {
-            margin-bottom: 15px;
-        }
-    </style>
+    <title>Редагування книги</title>
+    <link rel="stylesheet" href="{% static 'css/book.css' %}" />
     <script>
         function loadBookData() {
             let bookId = document.getElementById("bookSelect").value;
             if (!bookId) return;
 
             fetch(`/books/detail/${bookId}/`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                console.log("Отримані дані:", data);
-
                 document.getElementById("book_id").value = data.id;
                 document.getElementById("book_name").value = data.name;
                 document.getElementById("book_publisher").value = data.publisher_id || "";
                 document.getElementById("book_author").value = data.author_id || "";
                 document.getElementById("book_genre").value = data.genre_id || "";
-                document.getElementById("book_quantity").value = data.quantity || 1; // Додаємо значення кількості
-
+                document.getElementById("book_quantity").value = data.quantity || 1;
                 document.getElementById("bookForm").action = `/books/edit/${data.id}/`;
                 document.getElementById("deleteButton").dataset.bookId = data.id;
             })
@@ -69,57 +42,48 @@
     </script>
 </head>
 <body>
+    <form id="bookForm" method="post" class="formedit">
+        {% csrf_token %}
+        <p class="title2">Редагування книги</p>
 
-<h2>Редагування книг</h2>
+        <label for="bookSelect" class="input">Оберіть книгу:</label>
+        <select id="bookSelect" class="input" onchange="loadBookData()">
+            <option value="">-- Оберіть книгу --</option>
+            {% for book in books %}
+                <option value="{{ book.id }}">{{ book.name }}</option>
+            {% endfor %}
+        </select>
 
-<label>Оберіть книгу: </label>
-<select id="bookSelect">
-    <option value="">-- Оберіть книгу --</option>
-    {% for book in books %}
-        <option value="{{ book.id }}">{{ book.name }}</option>
-    {% endfor %}
-</select>
-<button type="button" onclick="loadBookData()">Вибрати</button>
+        <input type="hidden" name="book_id" id="book_id">
 
-<form id="bookForm" method="post">
-    {% csrf_token %}
-    <input type="hidden" name="book_id" id="book_id">
+        <input required placeholder="Назва книги" type="text" name="name" id="book_name" class="input">
 
-    <label>Назва:</label>
-    <input type="text" name="name" id="book_name">
+        <select name="publisher" id="book_publisher" class="input">
+            <option value="">-- Виберіть видавництво --</option>
+            {% for publisher in publishers %}
+                <option value="{{ publisher.id }}">{{ publisher.name_publisher }}</option>
+            {% endfor %}
+        </select>
 
-    <label>Видавництво:</label>
-    <select name="publisher" id="book_publisher">
-        <option value="">-- Виберіть видавництво --</option>
-        {% for publisher in publishers %}
-            <option value="{{ publisher.id }}">{{ publisher.name_publisher }}</option>
-        {% endfor %}
-    </select>
+        <select name="author" id="book_author" class="input">
+            <option value="">-- Виберіть автора --</option>
+            {% for author in authors %}
+                <option value="{{ author.id }}">{{ author.name_author }} {{ author.surname_author }}</option>
+            {% endfor %}
+        </select>
 
-    <label>Автор:</label>
-    <select name="author" id="book_author">
-        <option value="">-- Виберіть автора --</option>
-        {% for author in authors %}
-            <option value="{{ author.id }}">{{ author.name_author }} {{ author.surname_author }}</option>
-        {% endfor %}
-    </select>
+        <select name="genre" id="book_genre" class="input">
+            <option value="">-- Виберіть жанр --</option>
+            {% for genre in genres %}
+                <option value="{{ genre.id }}">{{ genre.name_genre }}</option>
+            {% endfor %}
+        </select>
 
-    <label>Жанр:</label>
-    <select name="genre" id="book_genre">
-        <option value="">-- Виберіть жанр --</option>
-        {% for genre in genres %}
-            <option value="{{ genre.id }}">{{ genre.name_genre }}</option>
-        {% endfor %}
-    </select>
+        <input type="number" name="quantity" id="book_quantity" min="1" value="1" class="input">
 
-    <label>Кількість примірників:</label>
-    <input type="number" name="quantity" id="book_quantity" min="1" value="1">
-
-    <button type="submit">Зберегти</button>
-    <button type="button" id="deleteButton" onclick="deleteBook()">Видалити</button>
-</form>
-
-<p><a href="{% url 'tools' %}">Назад</a></p>
-
+        <button type="submit" class="submit">Зберегти</button>
+        <button type="button" id="deleteButton" onclick="deleteBook()" class="submit delete">Видалити</button>
+        <p class="message"><a href="{% url 'tools' %}">Назад</a></p>
+    </form>
 </body>
 </html>

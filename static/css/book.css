@@ -9,9 +9,12 @@ body {
     justify-content: center;
     align-items: center;
 }
-
+.formedit{
+    margin-top: 120px;
+}
 /* Форма */
 form {
+
     display: flex;
     flex-direction: column;
     gap: 10px;

@@ -1,16 +1,19 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <title>{{ publisher_form }}</title>
+    <title>Додати видавництво</title>
+      <link rel="stylesheet" href="{% static 'css/book.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
-    <h1>{{ title }}</h1>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Зберегти</button>
+        <p class="title2">Додати видавництво</p>
+        <input required="" placeholder="Назва видавництва" type="text" id="name_publisher" name="name_publisher" class="input">
+        <button type="submit" class="submit">Зберегти</button>
+        <p class="message"><a href="{% url 'tools' %}">Назад</a></p>
     </form>
-    <p><a href="{% url 'tools' %}">Назад</a></p>
 </body>
 </html>
