@@ -1,7 +1,7 @@
 from django import forms
 from books.models import Book
 from users.models import User
-from .models import ServiceHistory, LineServiceHistory
+from .models import ServiceHistory, LineServiceHistory, BookRequest
 
 
 # Форма для видачі книги
@@ -38,3 +38,15 @@ class ReturnBookForm(forms.Form):
         if not ServiceHistory.objects.filter(loan_code=loan_code).exists():
             raise forms.ValidationError("Неправильний номер видачі.")
         return loan_code
+
+
+class BookRequestForm(forms.ModelForm):
+    book = forms.ModelChoiceField(
+        queryset=Book.objects.filter(status='available'),
+        label="Оберіть книгу"
+    )
+
+    class Meta:
+        model = BookRequest
+        fields = ['book']
+

@@ -29,6 +29,8 @@ class ServiceHistory(models.Model):
 
 def default_return_date():
     return now().date() + timedelta(days=14)
+
+
 class LineServiceHistory(models.Model):
     STATUS_CHOICES = [
         ('active', 'Активний'),
@@ -51,3 +53,21 @@ class LineServiceHistory(models.Model):
 
     def __str__(self):
         return f"{self.book.name} ({self.get_status_display()})"
+
+
+class BookRequest(models.Model):
+    request_code = models.CharField(max_length=6, unique=True, editable=False)
+    reader = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="book_requests", limit_choices_to={'type_user': 'reader'}
+    )
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_approved = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        if not self.request_code:
+            self.request_code = get_random_string(6).upper()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"Request {self.request_code} by {self.reader.username} for {self.book.name}"

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Запити на видачу книг</title>
+</head>
+<body>
+
+    <h2>Запити на видачу книг, що очікують підтвердження</h2>
+
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <ul>
+        {% for request in book_requests %}
+            <li>
+                Запит від {{ request.reader.username }} на книгу "{{ request.book.name}}"
+                <form method="post" action="{% url 'approve_book_request' request.request_code %}">
+                    {% csrf_token %}
+                    <button type="submit">Підтвердити</button>
+                </form>
+            </li>
+        {% empty %}
+            <li>Немає запитів, що очікують підтвердження.</li>
+        {% endfor %}
+    </ul>
+
+    <a href="/home">Повернутися на головну</a>
+
+</body>
+</html>

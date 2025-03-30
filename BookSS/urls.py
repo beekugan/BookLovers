@@ -10,7 +10,8 @@ from books.views import (
     publisher_create, publisher_update, publisher_delete
 
 )
-from logbook.views import (issue_book, return_book, user_history)
+from logbook.views import (issue_book, return_book, user_history,
+                           create_book_request, pending_book_requests, approve_book_request, user_book_requests)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -63,5 +64,15 @@ urlpatterns = [
     # Перегляд історії видач (Користувач)
     path("history/", user_history, name="user_history"),
 
+    # Користувач створює запит на отримання книги
+    path('request-book/', create_book_request, name='create_book_request'),
+
+    # Бібліотекар переглядає запити, що очікують підтвердження
+    path('pending-requests/', pending_book_requests, name='pending_book_requests'),
+
+    # Бібліотекар підтверджує запит на видачу книги
+    path('approve-request/<str:request_code>/', approve_book_request, name='approve_book_request'),
+
+    path('my-requests/', user_book_requests, name='user_book_requests'),
 
 ]
