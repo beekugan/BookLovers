@@ -11,11 +11,14 @@
 
 <div class="navigation-card">
     {% if user.type_user == "reader" %}
-        <a href="#" class="tab"><i class="fas fa-book"></i></a>
-        <a href="#" class="tab"><i class="fas fa-list"></i></a>
+        <a href="{% url 'create_book_request' %}" class="tab"><i class="fas fa-pen-square"></i></a>
+        <a href="{% url 'user_book_requests' %}" class="tab"><i class="fas fa-clock"></i></a>
+        <a href="{% url 'user_history' %}" class="tab"><i class="fas fa-list"></i></a>
+
     {% else %}
         <a href="{% url 'tools' %}" class="tab"><i class="fas fa-plus-circle"></i></a>
-        <a href="#" class="tab"><i class="fas fa-user-cog"></i></a>
+        <a href="{% url 'pending_book_requests' %}" class="tab"><i class="fas fa-user-cog"></i></a>
+
     {% endif %}
     <a href="{% url 'logout' %}" class="tab"><i class="fas fa-sign-out-alt"></i></a>
 </div>
