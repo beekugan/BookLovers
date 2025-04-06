@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Сповіщення</title>
+</head>
+<body>
+{% block content %}
+<h2>Мої сповіщення</h2>
+<ul>
+    {% for note in notifications %}
+        <li {% if not note.is_read %}style="font-weight: bold;"{% endif %}>
+            {{ note.message }} <br>
+            <small>{{ note.created_at|date:"d.m.Y H:i" }}</small>
+        </li>
+    {% empty %}
+        <li>У вас ще немає сповіщень.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
+</body>
+</html>

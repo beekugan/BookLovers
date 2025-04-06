@@ -67,6 +67,7 @@
                         <th>Код видачі</th>
                         <th>Книга</th>
                         <th>Дата видачі</th>
+                        <th>Потрібно повернути до</th>
                         <th>Дата повернення</th>
                         <th>Статус</th>
                     </tr>
@@ -78,11 +79,19 @@
                             <td>
                                 <ul>
                                     {% for loan in history.loan_items.all %}
-                                        <li>{{ loan.book.name }} ({{ loan.get_status_display }})</li>
+                                        <li>{{ loan.book.name }} </li>
                                     {% endfor %}
                                 </ul>
                             </td>
                             <td>{{ history.created_at|date:"d.m.Y" }}</td>
+                             <td> <!-- НОВА КОЛОНКА -->
+                                <ul>
+                                    {% for loan in history.loan_items.all %}
+                                        <li>{{ loan.date_when_should_return|date:"d.m.Y" }}</li>
+                                    {% endfor %}
+                                </ul>
+                             </td>
+
                             <td>
                                 {% for loan in history.loan_items.all %}
                                     {% if loan.date_when_returned %}

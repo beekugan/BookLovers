@@ -9,6 +9,7 @@ class User(AbstractUser):
     ]
     type_user = models.CharField(max_length=10, choices=TYPE_CHOICES)
     phone = models.CharField(max_length=20, blank=True, null=True)
+    is_blocked = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.username} ({self.get_type_user_display()})"

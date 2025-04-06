@@ -42,8 +42,14 @@ INSTALLED_APPS = [
     'books',
     'users',
     'logbook',
-    'notifications'
+    'notifications',
+    'django_crontab'
 ]
+
+CRONJOBS = [
+    ('0 6 * * *', 'django.core.management.call_command', ['check_loans']),
+]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

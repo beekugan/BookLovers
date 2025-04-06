@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
 from django.utils.timezone import now, timedelta
+from notifications.utils import notify_user
 
 from .forms import BookRequestForm
 from .forms import IssueBookForm, ReturnBookForm
@@ -57,23 +58,46 @@ def return_book(request):
             loan_code = form.cleaned_data['loan_code']
             service_history = get_object_or_404(ServiceHistory, loan_code=loan_code)
             loan_items = service_history.loan_items.filter(status='active')
+            reader = service_history.reader
 
             for loan in loan_items:
                 loan.date_when_returned = now().date()
                 loan.status = 'returned'
-                loan.book.quantity += 1  # Повертаємо книгу
+                loan.book.quantity += 1
                 if loan.book.status == 'borrowed':
                     loan.book.status = 'available'
                 loan.book.save()
                 loan.save()
 
-            return redirect('return_book')  # Перенаправлення на сторінку повернення
+            # 🔍 Перевірка, чи користувач ще має прострочені активні книги
+            active_loans = LineServiceHistory.objects.filter(
+                service_history__reader=reader,
+                status='active'
+            )
 
+            overdue_exists = any(
+                loan.date_when_should_return < now().date() for loan in active_loans
+            )
+
+            # 🔓 Якщо нема прострочених → розблокуємо і надсилаємо сповіщення
+            if not overdue_exists and reader.is_blocked:
+                reader.is_blocked = False
+                reader.save()
+
+                # Сповіщення
+                notify_user(
+                    reader,
+                    "Ваш акаунт розблоковано, оскільки всі книги повернуто.",
+                    type="unblock"
+                )
+
+                messages.info(request, f"Користувача {reader.email} розблоковано.")
+
+            return redirect('return_book')
     else:
         form = ReturnBookForm()
 
     return render(request, 'logbook/return_book.html', {'form': form})
-
 
 @login_required
 def user_history(request):
@@ -83,6 +107,10 @@ def user_history(request):
 
 @login_required
 def create_book_request(request):
+    if request.user.is_blocked:
+        messages.error(request, "Ваш акаунт заблоковано. Ви не можете створювати запити на книги.")
+        return redirect('user_book_requests')
+
     if request.method == "POST":
         form = BookRequestForm(request.POST)
         if form.is_valid():

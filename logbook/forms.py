@@ -7,7 +7,7 @@ from .models import ServiceHistory, LineServiceHistory, BookRequest
 # Форма для видачі книги
 class IssueBookForm(forms.ModelForm):
     reader = forms.ModelChoiceField(
-        queryset=User.objects.filter(type_user='reader'),
+        queryset=User.objects.filter(type_user='reader', is_blocked=False),
         label="Читач"
     )
     book = forms.ModelChoiceField(
