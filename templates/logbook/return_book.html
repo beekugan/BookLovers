@@ -1,17 +1,28 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Повернення книги</title>
+    <link rel="stylesheet" href="{% static 'css/book.css' %}" />
 </head>
-<body>
-    <h2>Повернення книги</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Повернути книгу</button>
-    </form>
-    <p><a href="{% url 'tools' %}">Назад</a></p>
+<body class="page-return-book">
+    <div class="div_reset_data">
+        <form method="post" class="formedit">
+            <p class="title2">Повернення книги</p>
+            {% csrf_token %}
+
+            <!-- Поле для введення номера видачі -->
+            <input type="text" name="loan_code" class="input" placeholder="Номер видачі" value="{{ form.loan_code.value|default:'' }}">
+
+            <!-- Кнопка повернення -->
+            <button type="submit" class="submit">Повернути книгу</button>
+
+            <!-- Кнопка назад -->
+             <button type="button" onclick="window.location.href='{% url 'tools' %}'" class="back-button">Назад</button>
+
+        </form>
+    </div>
 </body>
 </html>

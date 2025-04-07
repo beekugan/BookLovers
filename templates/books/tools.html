@@ -14,10 +14,10 @@
         <a href="#" class="tab"><i class="fas fa-book"></i></a>
         <a href="#" class="tab"><i class="fas fa-list"></i></a>
     {% else %}
-        <a href="{% url 'tools' %}" class="tab"><i class="fas fa-plus-circle"></i></a>
-        <a href="#" class="tab"><i class="fas fa-user-cog"></i></a>
+        <a href="{% url 'home' %}" class="tab" title="Профіль"><i class="fas fa-home"></i></a>
+        <a href="{% url 'pending_book_requests' %}" class="tab" title="Очікувані запити"><i class="fas fa-clock"></i></a>
     {% endif %}
-    <a href="{% url 'logout' %}" class="tab"><i class="fas fa-sign-out-alt"></i></a>
+    <a href="{% url 'logout' %}" class="tab" title="Вихід"><i class="fas fa-sign-out-alt"></i></a>
 </div>
 
     <div class="profile-container">
@@ -57,7 +57,9 @@
                     </ul>
                 </div>
             </div>
-
+            </div>
+<div class="profile-card">
+    <h2>Повернення і видача книг</h2>
             <div class="category">
                 <div class="category-box">
                     <h3>📖 Видача книг</h3>
@@ -73,6 +75,7 @@
                     </ul>
                 </div>
             </div>
+    </div>
 
         </div>
     </div>

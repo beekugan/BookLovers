@@ -94,3 +94,26 @@ form {
     text-decoration: underline;
 }
 
+.back-button {
+    height: 50px;
+    width: 100%;
+    background-color: #f0f0f0;
+    color: #333;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease;
+    margin-top: 10px; /* Відстань між кнопками */
+}
+
+.back-button:hover {
+    background-color: #e0e0e0;
+    border-color: #bbb;
+}
+
+.back-button:active {
+    background-color: #d0d0d0;
+}

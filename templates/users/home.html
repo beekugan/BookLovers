@@ -11,17 +11,17 @@
 
 <div class="navigation-card">
     {% if user.type_user == "reader" %}
-        <a href="{% url 'create_book_request' %}" class="tab"><i class="fas fa-pen-square"></i></a>
-        <a href="{% url 'user_book_requests' %}" class="tab"><i class="fas fa-clock"></i></a>
-        <a href="{% url 'user_history' %}" class="tab"><i class="fas fa-list"></i></a>
-
+        <a href="{% url 'create_book_request' %}" class="tab" title="Створити запит на книгу"><i class="fas fa-pen-square"></i></a>
+        <a href="{% url 'user_book_requests' %}" class="tab" title="Мої запити на книги"><i class="fas fa-clock"></i></a>
+        <a href="{% url 'user_history' %}" class="tab" title="Історія запитів"><i class="fas fa-list"></i></a>
+        <a href="{% url 'user_notifications' %}" class="tab" title="Сповіщення"><i class="fas fa-bell"></i></a>
     {% else %}
-        <a href="{% url 'tools' %}" class="tab"><i class="fas fa-plus-circle"></i></a>
-        <a href="{% url 'pending_book_requests' %}" class="tab"><i class="fas fa-user-cog"></i></a>
-
+        <a href="{% url 'tools' %}" class="tab" title="Інструменти"><i class="fas fa-plus-circle"></i></a>
+        <a href="{% url 'pending_book_requests' %}" class="tab" title="Очікувані запити"><i class="fas fa-clock"></i></a>
     {% endif %}
-    <a href="{% url 'logout' %}" class="tab"><i class="fas fa-sign-out-alt"></i></a>
+    <a href="{% url 'logout' %}" class="tab" title="Вихід"><i class="fas fa-sign-out-alt"></i></a>
 </div>
+
 
 <div class="profile-container">
     <div class="profile-card">

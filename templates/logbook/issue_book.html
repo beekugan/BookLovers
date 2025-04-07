@@ -1,17 +1,40 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Видача книги</title>
+    <link rel="stylesheet" href="{% static 'css/book.css' %}" />
 </head>
 <body>
-    <h2>Видача книги</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Видати книгу</button>
-    </form>
-    <p><a href="{% url 'tools' %}">Назад</a></p>
+    <div class="div_reset_data">
+        <form method="post">
+            <p class="title2">Видача книги</p>
+            {% csrf_token %}
+
+            <!-- Поле для вибору читача -->
+            <select name="reader" class="select">
+                <option disabled selected>Оберіть читача</option>
+                {% for reader in form.fields.reader.queryset %}
+                    <option value="{{ reader.pk }}">{{ reader.get_full_name }}</option>
+                {% endfor %}
+            </select>
+
+            <!-- Поле для вибору книги -->
+           <select name="book" class="select">
+                <option disabled selected>Оберіть книгу</option>
+                {% for book in form.book.field.queryset %}
+                    <option value="{{ book.pk }}">{{ book.name }}</option>
+                {% endfor %}
+            </select>
+
+            <!-- Кнопка видачі -->
+            <button type="submit" class="submit">Видати книгу</button>
+
+            <!-- Посилання назад -->
+            <button type="button" onclick="window.location.href='{% url 'tools' %}'" class="back-button">Назад</button>
+        </form>
+    </div>
 </body>
 </html>
