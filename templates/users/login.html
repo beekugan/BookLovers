@@ -13,6 +13,16 @@
 <div class="container">
   <img class="logo_log" src="{% static 'img/logo.png' %}" alt="Лого" />
 
+  {% if messages %}
+    <div id="message-container">
+      {% for message in messages %}
+        <div class="message {{ message.tags }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
   <form method="post">
     {% csrf_token %}
 
@@ -20,12 +30,42 @@
     {{ form.username }}
 
     <label class="label_login" for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
-    {{ form.password }}
+    <div class="password-container">
+      <input type="password" id="password" name="password" class="input" required placeholder="Пароль">
+      <i id="togglePassword" class="fas fa-eye-slash password-icon"></i> <!-- Іконка "ока" -->
+    </div>
 
     <button class="button_llr" type="submit">Увійти</button>
   </form>
 
   <p class="auth-footer">Ще не маєте акаунту? <a href="{% url 'register' %}" class="link">Зареєструватися</a></p>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    // Виведення пароля
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordField = document.getElementById('password');
+
+    togglePassword.addEventListener('click', function () {
+        const type = passwordField.type === 'password' ? 'text' : 'password';
+        passwordField.type = type;
+        this.classList.toggle('fa-eye');
+        this.classList.toggle('fa-eye-slash');
+    });
+
+    // Автоматичне приховування повідомлень після 4 секунд
+    const messages = document.querySelectorAll(".message");
+    messages.forEach(function(message) {
+        setTimeout(function() {
+            message.style.opacity = "0";
+            setTimeout(function() {
+                message.style.display = "none";
+            }, 500); // Час для поступового зникнення
+        }, 2000); // 4 секунди
+    });
+});
+</script>
+
 </body>
 </html>

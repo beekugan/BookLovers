@@ -1,29 +1,62 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Замовлення книги</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
 
-    <h2>Замовлення книги</h2>
+    <div class="navigation-card">
+       <a href="{% url 'home' %}" class="tab" title="Профіль"><i class="fas fa-home"></i></a>
+        <a href="{% url 'user_book_requests' %}" class="tab" title="Мої запити на книги"><i class="fas fa-clock"></i></a>
+        <a href="{% url 'user_history' %}" class="tab" title="Історія запитів"><i class="fas fa-list"></i></a>
+        <a href="{% url 'user_notifications' %}" class="tab" title="Сповіщення"><i class="fas fa-bell"></i></a>
+    </div>
 
-    {% if messages %}
-        <ul>
-            {% for message in messages %}
-                <li>{{ message }}</li>
+    <div class="profile-container">
+        <div class="profile-card narrow-card">
+
+            <h2>Замовлення книги</h2>
+
+            {% if messages %}
+                <div id="flash-message" class="flash-success">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+                <script>
+                    setTimeout(function () {
+                        window.location.href = "{% url 'user_book_requests' %}";
+                    }, 3000);
+                </script>
+            {% endif %}
+
+           <form method="post" class="request-form">
+    {% csrf_token %}
+
+    <div class="form-group">
+        <label for="id_book">Оберіть книгу:</label>
+        <select name="book" id="id_book" class="form-control">
+            {% for book in form.book.field.queryset %}
+                <option value="{{ book.pk }}" {% if form.book.value == book.pk %}selected{% endif %}>
+                    {{ book }}
+                </option>
             {% endfor %}
-        </ul>
-    {% endif %}
+        </select>
+    </div>
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Надіслати запит</button>
-    </form>
+    <button type="submit" class="submit-btn">Надіслати запит</button>
+           <a class="logout-link" href="{% url 'home' %}">Повернутися на головну</a>
+</form>
 
-    <a href="/home">Повернутися на головну</a>
+
+
+        </div>
+    </div>
 
 </body>
 </html>

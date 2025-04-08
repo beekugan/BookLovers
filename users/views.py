@@ -13,6 +13,7 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.contrib import messages
 
 from .forms import RegisterForm, ReaderRegisterForm, LibrarianRegisterForm, EmailConfirmationForm
 from .models import Speciality, ReaderSpeciality
@@ -158,6 +159,9 @@ def login_view(request):
             user = form.get_user()
             login(request, user)
             return redirect("home")  # Перенаправлення після успішного логіну
+        else:
+            # Якщо форма недійсна (наприклад, логін/пароль неправильні)
+            messages.error(request, "Невірний логін або пароль.")
     else:
         form = AuthenticationForm()
 

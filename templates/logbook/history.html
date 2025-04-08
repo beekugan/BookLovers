@@ -1,12 +1,15 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Історія ваших видач</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Inter', sans-serif;
             background-color: #f8f8f8;
             margin: 0;
             padding: 20px;
@@ -18,6 +21,7 @@
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
+            margin-top: 50px;
         }
         h2 {
             text-align: center;
@@ -34,7 +38,7 @@
             border-bottom: 1px solid #ddd;
         }
         th {
-            background-color: #007BFF;
+            background-color: #706147;
             color: white;
         }
         tr:nth-child(even) {
@@ -57,6 +61,13 @@
     </style>
 </head>
 <body>
+<div class="navigation-card">
+    <a href="{% url 'home' %}" class="tab" title="Профіль"><i class="fas fa-home"></i></a>
+        <a href="{% url 'create_book_request' %}" class="tab" title="Створити запит на книгу"><i class="fas fa-pen-square"></i></a>
+
+        <a href="{% url 'user_book_requests' %}" class="tab" title="Мої запити на книги"><i class="fas fa-clock"></i></a>
+        <a href="{% url 'user_notifications' %}" class="tab" title="Сповіщення"><i class="fas fa-bell"></i></a>
+    </div>
     <div class="container">
         <h2>Історія ваших видач</h2>
 

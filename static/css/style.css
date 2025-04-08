@@ -115,15 +115,22 @@ input[type=password],[type=email] {
 }
 /*кнопка показу пароля*/
 .password-container {
-  position: relative;
-  display: flex;
-  align-items: center;
+    position: relative;
+    width: 100%;
+}
+
+.password-icon {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
 }
 
 .password-container input {
-  width: 100%;
-  padding-right: 30px; /* Розмір іконки, щоб забезпечити вільний простір справа */
+    width: 100%;
 }
+
 
 .button_pass {
   position: absolute;
@@ -454,4 +461,74 @@ input[type=password],[type=email] {
 
   overflow: hidden;
   transition: all .3s cubic-bezier(.6,0,.4,1);
+}
+.auth-footer {
+    font-family: 'Inter', sans-serif;
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #ffffff;
+}
+
+/* Стилі для посилання в auth-footer */
+.auth-footer .link {
+    font-family: 'Inter', sans-serif;
+    color: #e6bd77;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.auth-footer .link:hover {
+    text-decoration: underline;
+}
+#message-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 999;
+    width: auto;
+    max-width: 300px;
+}
+
+/* Стиль для повідомлень */
+.message {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+}
+
+.message.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.message.info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+.message.warning {
+    background-color: #fff3cd;
+    color: #856404;
+}
+.form-errors {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f8d7da;
+    color: #721c24;
+    border-radius: 5px;
+}
+
+.error-message {
+    margin: 0;
+    padding: 5px;
 }

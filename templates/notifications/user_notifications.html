@@ -1,22 +1,43 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uk">
 <head>
     <meta charset="UTF-8">
     <title>Сповіщення</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
-{% block content %}
-<h2>Мої сповіщення</h2>
-<ul>
-    {% for note in notifications %}
-        <li {% if not note.is_read %}style="font-weight: bold;"{% endif %}>
-            {{ note.message }} <br>
-            <small>{{ note.created_at|date:"d.m.Y H:i" }}</small>
-        </li>
-    {% empty %}
-        <li>У вас ще немає сповіщень.</li>
-    {% endfor %}
-</ul>
-{% endblock %}
+
+<div class="navigation-card">
+   <a href="{% url 'home' %}" class="tab" title="Профіль"><i class="fas fa-home"></i></a>
+    <a href="{% url 'create_book_request' %}" class="tab" title="Створити запит на книгу"><i class="fas fa-pen-square"></i></a>
+   <a href="{% url 'user_book_requests' %}" class="tab" title="Мої запити на книги"><i class="fas fa-clock"></i></a>
+   <a href="{% url 'user_history' %}" class="tab" title="Історія запитів"><i class="fas fa-list"></i></a>
+
+</div>
+
+<div class="profile-container">
+    <div class="profile-card notifications-card narrow-card">
+
+        <h2>Мої сповіщення</h2>
+
+        {% if notifications %}
+            <ul class="notifications-list">
+                {% for note in notifications %}
+                    <li class="notification-item {{ note.type }} {% if not note.is_read %}unread{% endif %}">
+
+                        <p>{{ note.message }}</p>
+                        <small>{{ note.created_at|date:"d.m.Y H:i" }}</small>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>У вас ще немає сповіщень.</p>
+        {% endif %}
+
+    </div>
+</div>
+
 </body>
 </html>

@@ -105,6 +105,7 @@ def user_history(request):
 
     return render(request, "logbook/history.html", {"histories": histories})
 
+
 @login_required
 def create_book_request(request):
     if request.user.is_blocked:
@@ -118,9 +119,13 @@ def create_book_request(request):
             book_request.reader = request.user
             book_request.save()
             messages.success(request, f"Ваш запит створено. Код вашого запиту: {book_request.request_code}")
-            return redirect('user_book_requests')
+
+            # Після створення — очистити форму та показати повідомлення:
+            form = BookRequestForm()
+            return render(request, 'logbook/create_book_request.html', {'form': form})
     else:
         form = BookRequestForm()
+
     return render(request, 'logbook/create_book_request.html', {'form': form})
 
 def is_librarian(user):

@@ -1,12 +1,39 @@
-{% extends "base.html" %}
+{% load static %}
 
-{% block content %}
-  <h2>Реєстрація бібліотекаря</h2>
-  <p>Заповніть форму для завершення реєстрації.</p>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Реєстрація бібліотекаря</title>
+    <link rel="stylesheet" href="{% static 'css/form.css' %}" />
+</head>
+<body>
+    {% block content %}
+    <form method="post">
+        {% csrf_token %}
+        <p class="title">Реєстрація бібліотекаря</p>
+        <p class="message">Будь ласка, заповніть форму для реєстрації бібліотекаря.</p>
 
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Зареєструватися</button>
-  </form>
-{% endblock %}
+        <div class="flex">
+            <input required="" placeholder="Ім'я" type="text" id="first_name" name="first_name" class="input">
+            <input required="" placeholder="Прізвище" type="text" id="last_name" name="last_name" class="input">
+        </div>
+
+        <input required="" placeholder="Номер телефону" type="tel" id="phone" name="phone" class="input">
+
+        <select id="faculty" name="faculty" class="select">
+            <option value="" disabled selected>Виберіть факультет...</option>
+            {% for faculty in faculties %}
+                <option value="{{ faculty.id }}">{{ faculty.name }}</option>
+            {% endfor %}
+        </select>
+
+        <input required="" placeholder="Пароль" type="password" id="password" name="password" class="input">
+
+        <button type="submit" class="submit">Зареєструватися</button>
+        <p class="signin">З повагою,<br>Команда сайту</p>
+    </form>
+    {% endblock %}
+
+    <script src="{% static 'js/faculties.js' %}"></script>
+</body>
+</html>

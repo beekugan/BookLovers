@@ -25,22 +25,28 @@
             {% for value, label in form.type_user.field.choices %}
                 <div class="custom-select-option" data-value="{{ value }}">{{ label }}</div>
             {% endfor %}
-
         </div>
-
     </div>
 
-    <!-- Правильне приховане поле -->
     <input type="hidden" name="type_user" id="hiddenTypeUser">
 
     <label class="label_login">{{ form.email.label }}</label>
     {{ form.email }}
 
+    <!-- Виведення помилок -->
+    {% if form.email.errors %}
+        <div class="form-errors" id="error-message">
+            {% for error in form.email.errors %}
+                <p class="error-message">{{ error }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
     <button class="button_llr" type="submit" id="submitBtn">Зареєструватися</button>
   </form>
+
+  <p class="auth-footer">Вже маєте акаунт? <a href="{% url 'login' %}" class="link">Увійти</a></p>
 </div>
-</body>
-</html>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
@@ -50,16 +56,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const options = document.querySelectorAll(".custom-select-option");
     const hiddenTypeUser = document.getElementById("hiddenTypeUser");
 
-    // Відкривати/закривати список
     selectedElement.addEventListener("click", function () {
         selectContainer.classList.toggle("active");
     });
 
-    // Вибір опції
     options.forEach(option => {
         option.addEventListener("click", function () {
             selectedElement.textContent = this.textContent;
-            hiddenTypeUser.value = this.dataset.value;  // Оновлюємо значення прихованого поля
+            hiddenTypeUser.value = this.dataset.value;
             selectContainer.classList.remove("active");
         });
     });
@@ -71,12 +75,17 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Перевірка перед відправкою форми
-    document.getElementById("submitBtn").addEventListener("click", function (e) {
-        if (!hiddenTypeUser.value) {
-            e.preventDefault();
-            alert("Будь ласка, виберіть тип користувача!");
+    // Закриття сповіщення через 4 секунди
+    {% if form.email.errors %}
+    setTimeout(function () {
+        const errorMessage = document.getElementById("error-message");
+        if (errorMessage) {
+            errorMessage.style.display = "none";
         }
-    });
+    }, 4000); // Сповіщення зникає через 4 секунди
+    {% endif %}
 });
 </script>
+
+</body>
+</html>
