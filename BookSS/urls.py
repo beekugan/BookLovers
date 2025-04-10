@@ -13,6 +13,7 @@ from books.views import (
 from logbook.views import (issue_book, return_book, user_history,
                            create_book_request, pending_book_requests, approve_book_request, user_book_requests)
 from notifications.views import user_notifications
+from reports.views import report_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -77,6 +78,9 @@ urlpatterns = [
     path('my-requests/', user_book_requests, name='user_book_requests'),
 
     # Сповіщення
-    path('notifications', user_notifications, name='user_notifications')
+    path('notifications', user_notifications, name='user_notifications'),
+
+    # Звіти
+    path('reports/', report_view, name='report_view')
 
 ]

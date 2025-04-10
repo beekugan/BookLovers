@@ -1,0 +1,157 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Звіти</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        body { font-family: Arial; margin: 20px; }
+        .form-section { margin-bottom: 30px; }
+        .table-container { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background-color: #f0f0f0; }
+        .dropdown-checkboxes {
+            border: 1px solid #ccc;
+            display: none;
+            position: absolute;
+            background: white;
+            padding: 10px;
+            z-index: 1000;
+        }
+        .dropdown-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Звіти</h1>
+
+    <form method="get" id="filter-form">
+        <div style="margin-bottom: 20px;">
+            <a href="?mode=loans&visible_columns=book&visible_columns=reader&visible_columns=librarian&visible_columns=status&visible_columns=date_when_was_taken&visible_columns=date_when_should_return&visible_columns=date_when_returned" class="mode-button" style="padding: 10px 20px; background-color: {% if mode == 'loans' %}#007bff{% else %}#ccc{% endif %}; color: white; text-decoration: none; border-radius: 4px; margin-right: 10px;">📄 Видачі</a>
+            <a href="?mode=books&visible_columns=name&visible_columns=author&visible_columns=genre&visible_columns=publisher&visible_columns=quantity&visible_columns=status" class="mode-button" style="padding: 10px 20px; background-color: {% if mode == 'books' %}#007bff{% else %}#ccc{% endif %}; color: white; text-decoration: none; border-radius: 4px;">📚 Книги</a>
+
+        </div>
+
+        <div class="form-section">
+            {% if mode == 'loans' %}
+                <input type="hidden" name="mode" value="loans">
+                {{ loan_form.book }}
+                {{ loan_form.reader }}
+                {{ loan_form.librarian }}
+                {{ loan_form.status }}
+                {{ loan_form.genre }}
+                {{ loan_form.author }}
+                {{ loan_form.publisher }}
+
+                <div class="dropdown-container">
+                    <button type="button" onclick="toggleCheckboxDropdown()">Вибрати відображуваний вміст ⬇</button>
+                    <div id="checkbox-dropdown" class="dropdown-checkboxes">
+                        {{ loan_form.visible_columns }}
+                    </div>
+                </div>
+
+            {% elif mode == 'books' %}
+                <input type="hidden" name="mode" value="books">
+                {{ book_form.book }}
+                {{ book_form.author }}
+                {{ book_form.genre }}
+                {{ book_form.publisher }}
+
+                <div class="dropdown-container">
+                    <button type="button" onclick="toggleCheckboxDropdown()">Вибрати відображуваний вміст ⬇</button>
+                    <div id="checkbox-dropdown" class="dropdown-checkboxes">
+                        {{ book_form.visible_columns }}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <button type="submit">Застосувати фільтри</button>
+    </form>
+
+    <hr>
+
+    {% if mode == 'loans' %}
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        {% if 'book' in visible_columns %}<th>Книга</th>{% endif %}
+                        {% if 'reader' in visible_columns %}<th>Читач</th>{% endif %}
+                        {% if 'librarian' in visible_columns %}<th>Бібліотекар</th>{% endif %}
+                        {% if 'status' in visible_columns %}<th>Статус</th>{% endif %}
+                        {% if 'date_when_was_taken' in visible_columns %}<th>Дата видачі</th>{% endif %}
+                        {% if 'date_when_should_return' in visible_columns %}<th>Дата повернення</th>{% endif %}
+                        {% if 'date_when_returned' in visible_columns %}<th>Фактичне повернення</th>{% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in loan_data %}
+                    <tr>
+                        {% if 'book' in visible_columns %}<td>{{ entry.book.name }}</td>{% endif %}
+                        {% if 'reader' in visible_columns %}<td>{{ entry.service_history.reader.username }}</td>{% endif %}
+                        {% if 'librarian' in visible_columns %}<td>{{ entry.service_history.librarian.username }}</td>{% endif %}
+                        {% if 'status' in visible_columns %}<td>{{ entry.get_status_display }}</td>{% endif %}
+                        {% if 'date_when_was_taken' in visible_columns %}<td>{{ entry.date_when_was_taken }}</td>{% endif %}
+                        {% if 'date_when_should_return' in visible_columns %}<td>{{ entry.date_when_should_return }}</td>{% endif %}
+                        {% if 'date_when_returned' in visible_columns %}<td>{{ entry.date_when_returned|default:"-" }}</td>{% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% elif mode == 'books' %}
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        {% if 'name' in visible_columns %}<th>Назва</th>{% endif %}
+                        {% if 'author' in visible_columns %}<th>Автор</th>{% endif %}
+                        {% if 'genre' in visible_columns %}<th>Жанр</th>{% endif %}
+                        {% if 'publisher' in visible_columns %}<th>Видавництво</th>{% endif %}
+                        {% if 'quantity' in visible_columns %}<th>Кількість</th>{% endif %}
+                        {% if 'status' in visible_columns %}<th>Статус</th>{% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for book in book_data %}
+                    <tr>
+                        {% if 'name' in visible_columns %}<td>{{ book.name }}</td>{% endif %}
+                        {% if 'author' in visible_columns %}<td>{{ book.author }}</td>{% endif %}
+                        {% if 'genre' in visible_columns %}<td>{{ book.genre }}</td>{% endif %}
+                        {% if 'publisher' in visible_columns %}<td>{{ book.publisher }}</td>{% endif %}
+                        {% if 'quantity' in visible_columns %}<td>{{ book.quantity }}</td>{% endif %}
+                        {% if 'status' in visible_columns %}<td>{{ book.get_status_display }}</td>{% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        function toggleCheckboxDropdown() {
+            const box = document.getElementById("checkbox-dropdown");
+            box.style.display = box.style.display === "block" ? "none" : "block";
+        }
+
+        $(document).ready(function () {
+            $('select').select2({
+                width: 'resolve',
+                language: {
+                    noResults: function () {
+                        return "Нічого не знайдено";
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

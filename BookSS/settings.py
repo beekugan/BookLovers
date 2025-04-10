@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'users',
     'logbook',
     'notifications',
+    'reports',
     'django_crontab'
 ]
 
