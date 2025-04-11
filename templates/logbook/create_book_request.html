@@ -7,11 +7,13 @@
     <title>Замовлення книги</title>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- Select2 стилі -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 </head>
 <body>
 
     <div class="navigation-card">
-       <a href="{% url 'home' %}" class="tab" title="Профіль"><i class="fas fa-home"></i></a>
+        <a href="{% url 'home' %}" class="tab" title="Профіль"><i class="fas fa-home"></i></a>
         <a href="{% url 'user_book_requests' %}" class="tab" title="Мої запити на книги"><i class="fas fa-clock"></i></a>
         <a href="{% url 'user_history' %}" class="tab" title="Історія запитів"><i class="fas fa-list"></i></a>
         <a href="{% url 'user_notifications' %}" class="tab" title="Сповіщення"><i class="fas fa-bell"></i></a>
@@ -35,28 +37,44 @@
                 </script>
             {% endif %}
 
-           <form method="post" class="request-form">
-    {% csrf_token %}
+            <form method="post" class="request-form">
+                {% csrf_token %}
 
-    <div class="form-group">
-        <label for="id_book">Оберіть книгу:</label>
-        <select name="book" id="id_book" class="form-control">
-            {% for book in form.book.field.queryset %}
-                <option value="{{ book.pk }}" {% if form.book.value == book.pk %}selected{% endif %}>
-                    {{ book }}
-                </option>
-            {% endfor %}
-        </select>
-    </div>
+                <div class="form-group">
+                    <label for="id_book">Оберіть книгу:</label>
+                    <select name="book" id="id_book" class="form-control">
+                        {% for book in form.book.field.queryset %}
+                            <option value="{{ book.pk }}" {% if form.book.value == book.pk %}selected{% endif %}>
+                                {{ book }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-    <button type="submit" class="submit-btn">Надіслати запит</button>
-           <a class="logout-link" href="{% url 'home' %}">Повернутися на головну</a>
-</form>
-
-
+                <button type="submit" class="submit-btn">Надіслати запит</button>
+                <a class="logout-link" href="{% url 'home' %}">Повернутися на головну</a>
+            </form>
 
         </div>
     </div>
+
+    <!-- Select2 скрипти -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#id_book').select2({
+                width: '100%',
+                placeholder: "Оберіть книгу",
+                allowClear: true,
+                language: {
+                    noResults: function () {
+                        return "Нічого не знайдено";
+                    }
+                }
+            });
+        });
+    </script>
 
 </body>
 </html>
