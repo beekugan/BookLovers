@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path
 from users.views import (
     register, register_reader, get_specialities, register_librarian,
-    confirm_email, home, login_view, logout_view, get_faculties
+    confirm_email, home, login_view, logout_view, get_faculties, index_view
 )
 from books.views import (
     tools, book_create, book_update, book_delete, book_detail, author_create,
@@ -16,7 +16,8 @@ from notifications.views import user_notifications
 from reports.views import report_view
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path("admin/", admin.site.urls),
+    path("", index_view, name="index"),
 
     # Реєстрація та авторизація
     path("register/", register, name="register"),

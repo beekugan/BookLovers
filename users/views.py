@@ -181,3 +181,6 @@ def register_view(request):
     faculties = Faculty.objects.all()  # Отримуємо всі факультети
     print("Факультети передані в шаблон:", faculties)
     return render(request, "register_reader.html", {"faculties": faculties})
+
+def index_view(request):
+    return render(request, "index.html")
