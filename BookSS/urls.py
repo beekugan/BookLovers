@@ -81,6 +81,7 @@ urlpatterns = [
     path('notifications', user_notifications, name='user_notifications'),
 
     # Звіти
-    path('reports/', report_view, name='report_view')
+    path('reports/', report_view, name='report_view'),
+
 
 ]

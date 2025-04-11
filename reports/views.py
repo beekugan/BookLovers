@@ -1,8 +1,34 @@
-from django.shortcuts import render
-from .forms import LoanReportForm, BookReportForm
-from logbook.models import LineServiceHistory
-from books.models import Book
+
+import csv
+import tempfile
 from datetime import date
+
+from django.http import HttpResponse
+from django.shortcuts import render
+from django.template.loader import get_template
+from django.utils.encoding import smart_str
+
+
+from books.models import Book
+from logbook.models import LineServiceHistory
+from .forms import LoanReportForm, BookReportForm
+
+# --- Лейбли для CSV заголовків
+COLUMN_LABELS = {
+    'book': 'Книга',
+    'reader': 'Читач',
+    'librarian': 'Бібліотекар',
+    'status': 'Статус',
+    'date_when_was_taken': 'Дата видачі',
+    'date_when_should_return': 'Дата повернення',
+    'date_when_returned': 'Фактичне повернення',
+    'name': 'Назва',
+    'author': 'Автор',
+    'genre': 'Жанр',
+    'publisher': 'Видавництво',
+    'quantity': 'Кількість',
+}
+
 
 def report_view(request):
     mode = request.GET.get('mode', 'loans')
@@ -66,7 +92,7 @@ def report_view(request):
             qs = qs.filter(book__genre=loan_form.cleaned_data['genre'])
 
         if loan_form.cleaned_data.get('author'):
-            qs = qs.filter(book__authors=loan_form.cleaned_data['author'])
+            qs = qs.filter(book__author=loan_form.cleaned_data['author'])
 
         if loan_form.cleaned_data.get('publisher'):
             qs = qs.filter(book__publisher=loan_form.cleaned_data['publisher'])
@@ -81,7 +107,7 @@ def report_view(request):
             qs = qs.filter(id=book_form.cleaned_data['book'].id)
 
         if book_form.cleaned_data.get('author'):
-            qs = qs.filter(authors=book_form.cleaned_data['author'])
+            qs = qs.filter(author=book_form.cleaned_data['author'])
 
         if book_form.cleaned_data.get('genre'):
             qs = qs.filter(genre=book_form.cleaned_data['genre'])
@@ -91,6 +117,58 @@ def report_view(request):
 
         book_data = qs.order_by('name')
 
+    # --- Експорт у CSV ---
+    if request.GET.get('export') == 'csv':
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = f'attachment; filename="report_{mode}.csv"'
+
+        # Додаємо BOM для підтримки кирилиці в Excel
+        response.write('\ufeff')  # BOM
+
+        writer = csv.writer(response, delimiter=';')
+        writer.writerow([COLUMN_LABELS.get(col, col) for col in visible_columns])
+
+        if mode == 'loans':
+            for entry in loan_data:
+                row = []
+                for col in visible_columns:
+                    if col == 'book':
+                        row.append(smart_str(entry.book.name))
+                    elif col == 'reader':
+                        row.append(smart_str(entry.service_history.reader.username))
+                    elif col == 'librarian':
+                        row.append(smart_str(entry.service_history.librarian.username))
+                    elif col == 'status':
+                        row.append(smart_str(entry.get_status_display()))
+                    elif col == 'date_when_was_taken':
+                        row.append(entry.date_when_was_taken.strftime('%d.%m.%Y'))
+                    elif col == 'date_when_should_return':
+                        row.append(entry.date_when_should_return.strftime('%d.%m.%Y'))
+                    elif col == 'date_when_returned':
+                        row.append(entry.date_when_returned.strftime('%d.%m.%Y') if entry.date_when_returned else '')
+                writer.writerow(row)
+
+        elif mode == 'books':
+            for book in book_data:
+                row = []
+                for col in visible_columns:
+                    if col == 'name':
+                        row.append(smart_str(book.name))
+                    elif col == 'author':
+                        row.append(smart_str(book.author))
+                    elif col == 'genre':
+                        row.append(smart_str(book.genre if book.genre else ''))
+                    elif col == 'publisher':
+                        row.append(smart_str(book.publisher if book.publisher else ''))
+                    elif col == 'quantity':
+                        row.append(book.quantity)
+                    elif col == 'status':
+                        row.append(smart_str(book.get_status_display()))
+                writer.writerow(row)
+
+        return response
+
+    # --- Звичайне відображення сторінки
     context = {
         'loan_form': loan_form,
         'book_form': book_form,
@@ -99,4 +177,7 @@ def report_view(request):
         'mode': mode,
         'visible_columns': visible_columns,
     }
+
     return render(request, 'reports/report.html', context)
+
+
