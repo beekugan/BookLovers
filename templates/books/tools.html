@@ -16,6 +16,7 @@
     {% else %}
         <a href="{% url 'home' %}" class="tab" title="Профіль"><i class="fas fa-home"></i></a>
         <a href="{% url 'pending_book_requests' %}" class="tab" title="Очікувані запити"><i class="fas fa-clock"></i></a>
+        <a href="{% url 'report_view' %}" class="tab" title="Звіти"><i class="fas fa-book"></i></a>
     {% endif %}
     <a href="{% url 'logout' %}" class="tab" title="Вихід"><i class="fas fa-sign-out-alt"></i></a>
 </div>
