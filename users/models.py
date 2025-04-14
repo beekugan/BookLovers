@@ -31,10 +31,6 @@ class Speciality(models.Model):
     faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE, related_name="specialities")
 
     def __str__(self):
-        return f"{self.name} ({self.faculty})"
-
-
-    def __str__(self):
         return f"{self.name} ({self.faculty.name})"
 
 

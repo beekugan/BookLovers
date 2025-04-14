@@ -79,7 +79,7 @@ urlpatterns = [
     path('my-requests/', user_book_requests, name='user_book_requests'),
 
     # Сповіщення
-    path('notifications', user_notifications, name='user_notifications'),
+    path('notifications/', user_notifications, name='user_notifications'),
 
     # Звіти
     path('reports/', report_view, name='report_view'),
