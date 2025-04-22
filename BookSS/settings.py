@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'logbook',
     'notifications',
     'reports',
+    'rest_framework',
+    'drf_yasg',
     'django_crontab'
 ]
 

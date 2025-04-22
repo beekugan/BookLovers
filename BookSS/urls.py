@@ -1,9 +1,25 @@
 from django.contrib import admin
-from django.urls import path
-from users.views import (
-    register, register_reader, get_specialities, register_librarian,
-    confirm_email, home, login_view, logout_view, get_faculties, index_view
+from django.urls import path, re_path
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+from rest_framework import permissions
+
+from books import api_views
+from users.api_views import (
+    UserListAPIView, UserDetailAPIView,
+    FacultyListAPIView, SpecialityListAPIView,
+    ReaderSpecialityListAPIView
 )
+from logbook.api_views import (
+    ServiceHistoryListCreateAPIView, ServiceHistoryDetailAPIView,
+    LineServiceHistoryListCreateAPIView, LineServiceHistoryDetailAPIView,
+    BookRequestListCreateAPIView, BookRequestDetailAPIView
+)
+from notifications.api_views import (
+    NotificationListAPIView,
+    NotificationDetailAPIView,
+)
+from reports.api_views import LoanReportAPIView, BookReportAPIView
 from books.views import (
     tools, book_create, book_update, book_delete, book_detail, author_create,
     author_update, author_delete, genre_create, genre_update, genre_delete,
@@ -14,6 +30,21 @@ from logbook.views import (issue_book, return_book, user_history,
                            create_book_request, pending_book_requests, approve_book_request, user_book_requests)
 from notifications.views import user_notifications
 from reports.views import report_view
+from users.views import (
+    register, register_reader, get_specialities, register_librarian,
+    confirm_email, home, login_view, logout_view, get_faculties, index_view,
+)
+
+schema_view = get_schema_view(
+   openapi.Info(
+      title="Library API",
+      default_version='v1',
+      description="Документація для API бібліотеки",
+      contact=openapi.Contact(email="kn22-t.bezushko@nubip.edu.ua"),
+   ),
+   public=True,
+   permission_classes=[permissions.AllowAny],
+)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -84,5 +115,37 @@ urlpatterns = [
     # Звіти
     path('reports/', report_view, name='report_view'),
 
+    # API-документація
+    re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 
+    path('books/', api_views.BookListCreateAPIView.as_view(), name='book-list-create'),
+    path('books/<int:pk>/', api_views.BookRetrieveUpdateDestroyAPIView.as_view(), name='book-detail'),
+
+    path('users/users/', UserListAPIView.as_view(), name='api_users'),
+    path('users/users/<int:pk>/', UserDetailAPIView.as_view(), name='api_user_detail'),
+    path('users/faculties/', FacultyListAPIView.as_view(), name='api_faculties'),
+    path('users/specialities/', SpecialityListAPIView.as_view(), name='api_specialities'),
+    path('users/reader-specialities/', ReaderSpecialityListAPIView.as_view(), name='api_reader_specialities'),
+
+    path('logbook/service-history/', ServiceHistoryListCreateAPIView.as_view(), name='api_service_history'),
+    path('logbook/service-history/<int:pk>/', ServiceHistoryDetailAPIView.as_view(), name='api_service_history_detail'),
+
+    # LineServiceHistory
+    path('logbook/line-service-history/', LineServiceHistoryListCreateAPIView.as_view(), name='api_line_service_history'),
+    path('logbook/line-service-history/<int:pk>/', LineServiceHistoryDetailAPIView.as_view(), name='api_line_service_history_detail'),
+
+    # BookRequest
+    path('logbook/book-requests/', BookRequestListCreateAPIView.as_view(), name='api_book_requests'),
+    path('logbook/book-requests/<int:pk>/', BookRequestDetailAPIView.as_view(), name='api_book_request_detail'),
+
+    path('notifications/api/', NotificationListAPIView.as_view(), name='api_notifications'),
+    path('notifications/api/<int:pk>/', NotificationDetailAPIView.as_view(), name='api_notification_detail'),
+
+    path('reports/api/loans/', LoanReportAPIView.as_view(), name='api_report_loans'),
+    path('reports/api/books/', BookReportAPIView.as_view(), name='api_report_books')
 ]
+
+
+
